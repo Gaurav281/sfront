@@ -87,7 +87,7 @@ export default function ContactUs() {
       </div>
 
       {/* Main Chat Container */}
-      <div className="bg-card-dark border border-border-dark rounded-2xl h-[550px] flex flex-col justify-between overflow-hidden shadow-xl">
+      <div id="chat-box" className="bg-card-dark border border-border-dark rounded-2xl h-[550px] flex flex-col justify-between overflow-hidden shadow-xl">
         
         {/* Chat Header banner */}
         <div className="bg-zinc-950/60 px-6 py-4 border-b border-zinc-900 flex items-center gap-3">

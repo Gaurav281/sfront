@@ -69,32 +69,32 @@ export default function Home({ onNavigate, onFilterCategory, onViewDetails }) {
     <div className="space-y-16 pb-16 select-none">
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 px-4 sm:px-6 lg:px-8 border-b border-border-dark bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,223,130,0.06),rgba(255,255,255,0))]">
+      <section className="relative overflow-hidden py-24 px-4 sm:px-6 lg:px-8 border-b border-border-dark bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,223,130,0.06),rgba(255,255,255,0))]">
         <div className="max-w-4xl mx-auto text-center space-y-6">
-          <div className="inline-flex items-center gap-2 bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs px-3.5 py-1.5 rounded-full">
+          <div className="inline-flex items-center gap-2 bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs px-4 py-2 rounded-full">
             <ShieldCheck className="w-4 h-4 text-accent-green" />
-            <span>Secure Moderated Handover Escrow Protection</span>
+            <span>Secure Safe Pay Hold Protection</span>
           </div>
           
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight tracking-tight">
-            Acquire Premium <span className="text-accent-green">Digital Assets</span> & Accounts
+            Buy <span className="text-accent-green">Instagram Accounts</span> & <span className="text-accent-green">YT Premium</span> Cheap
           </h1>
           
-          <p className="text-zinc-400 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
-            The trusted marketplace to securely buy verified Instagram pages, monetized YouTube channels, streaming subscriptions, and expert white-hat digital services.
+          <p className="text-zinc-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-medium">
+            Get active Instagram accounts, YouTube Premium keys, streaming subscriptions, and expert services at low prices. Safe 24-hour handover.
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-3 pt-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
             <button
               onClick={() => onNavigate('shop')}
-              className="bg-accent-green hover:bg-accent-green-hover text-black font-extrabold text-xs py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="bg-accent-green hover:bg-accent-green-hover text-black font-extrabold text-sm py-4 px-8 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg"
             >
               <span>Open Shop</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 stroke-[3px]" />
             </button>
             <button
               onClick={() => onNavigate('about')}
-              className="bg-zinc-900 hover:bg-zinc-800 text-white font-semibold text-xs py-3 px-6 rounded-xl border border-zinc-800 transition-colors cursor-pointer"
+              className="bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-sm py-4 px-8 rounded-xl border border-zinc-800 transition-colors cursor-pointer"
             >
               How It Works
             </button>

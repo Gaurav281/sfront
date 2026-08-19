@@ -83,7 +83,7 @@ export default function CategoryList({ selectedCategory, onFilterCategory, onVie
       </div>
 
       {/* Horizontal categories list (instant loading) */}
-      <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-none border-b border-zinc-900">
+      <div id="shop-categories" className="flex overflow-x-auto gap-2 pb-2 scrollbar-none border-b border-zinc-900">
         {categories.map((cat) => (
           <button
             key={cat.name}

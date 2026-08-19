@@ -232,7 +232,7 @@ export default function Profile() {
         </div>
 
         {/* Purchase history column - Card Format Layout */}
-        <div className="lg:col-span-7 bg-card-dark border border-border-dark p-6 rounded-2xl space-y-4 shadow-lg">
+        <div id="profile-purchases" className="lg:col-span-7 bg-card-dark border border-border-dark p-6 rounded-2xl space-y-4 shadow-lg">
           <h3 className="text-white font-extrabold text-sm border-b border-zinc-900 pb-2 flex items-center gap-1.5">
             <ShoppingBag className="w-4 h-4 text-accent-green" />
             <span>My Purchase History</span>

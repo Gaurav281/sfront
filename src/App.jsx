@@ -13,6 +13,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
+import Tutorial from './components/Tutorial'; // Imported tutorial system
 import { useAuthStore } from './store/useAuthStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, User, LogOut } from 'lucide-react';
@@ -26,6 +27,9 @@ export default function App() {
   
   // Mobile drawer state managed at root level
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Tutorial Tour State (active if not completed before)
+  const [tutorialActive, setTutorialActive] = useState(localStorage.getItem('tutorialCompleted') !== 'true');
   
   const { user, logout } = useAuthStore();
   const isAdmin = user && user.role === 'admin';
@@ -280,7 +284,7 @@ export default function App() {
                     </button>
                     <button
                       onClick={() => handleMobileNavClick('signup')}
-                      className="text-center bg-accent-green text-black font-bold py-2 rounded-xl text-xs cursor-pointer"
+                      className="text-center bg-accent-green text-black font-bold py-2 rounded-xl text-xs"
                     >
                       Sign Up
                     </button>
@@ -291,6 +295,16 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Onboarding tour tutorial overlay */}
+      {tutorialActive && (
+        <Tutorial
+          activePage={activePage}
+          onNavigate={handleNavigate}
+          user={user}
+          onComplete={() => setTutorialActive(false)}
+        />
+      )}
 
     </div>
   );
