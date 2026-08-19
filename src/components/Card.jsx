@@ -70,7 +70,7 @@ export default function Card({ listing, onViewDetails }) {
       whileHover={{ y: -6, borderColor: '#00DF82' }}
       transition={{ duration: 0.25 }}
       onClick={() => onViewDetails(listing)}
-      className="bg-card-dark border border-border-dark rounded-xl p-5 flex flex-col justify-between h-[360px] cursor-pointer group select-none transition-colors relative overflow-hidden"
+      className="bg-card-dark border border-zinc-700/80 rounded-xl p-5 flex flex-col justify-between h-[360px] cursor-pointer group select-none transition-all relative overflow-hidden shadow-lg shadow-black/35"
     >
       {/* Top Left Discount % Badge */}
       {hasDiscount && (

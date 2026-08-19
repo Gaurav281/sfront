@@ -87,7 +87,7 @@ export default function ContactUs() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 select-none space-y-6">
+    <div className="max-w-6xl w-full mx-auto px-4 py-4 select-none space-y-4">
       
       {/* Page Header */}
       <div className="border-b border-border-dark pb-6 flex justify-between items-end flex-wrap gap-4">
@@ -107,7 +107,7 @@ export default function ContactUs() {
       </div>
 
       {/* Main Chat Container */}
-      <div id="chat-box" className="bg-card-dark border border-border-dark rounded-2xl h-[550px] flex flex-col justify-between overflow-hidden shadow-xl">
+      <div id="chat-box" className="bg-card-dark border border-zinc-700/80 rounded-2xl h-[460px] flex flex-col justify-between overflow-hidden shadow-xl">
         
         {/* Chat Header banner */}
         <div className="bg-zinc-950/60 px-6 py-4 border-b border-zinc-900 flex justify-between items-center">
@@ -148,8 +148,8 @@ export default function ContactUs() {
                     <div
                       className={`max-w-[70%] p-3.5 rounded-2xl text-xs ${
                         isMe
-                          ? 'bg-accent-green/10 border border-accent-green/25 text-white rounded-tr-none'
-                          : 'bg-zinc-900 border border-zinc-800 text-white rounded-tl-none'
+                          ? 'bg-emerald-950/60 border border-emerald-800/40 text-emerald-100 rounded-tr-none'
+                          : 'bg-zinc-900 border border-zinc-800/80 text-zinc-100 rounded-tl-none'
                       }`}
                     >
                       <p className="leading-relaxed whitespace-pre-wrap font-medium">{msg.text}</p>

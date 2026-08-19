@@ -69,7 +69,7 @@ export default function Home({ onNavigate, onFilterCategory, onViewDetails }) {
     <div className="space-y-16 pb-16 select-none">
       
       {/* Hero Section */}
-      <section id="hero-section" className="relative overflow-hidden py-24 px-4 sm:px-6 lg:px-8 border-b border-border-dark bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,223,130,0.06),rgba(255,255,255,0))]">
+      <section id="hero-section" className="relative overflow-hidden py-10 md:py-14 px-4 sm:px-6 lg:px-8 border-b border-zinc-700/80 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,223,130,0.06),rgba(255,255,255,0))]">
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <div className="inline-flex items-center gap-2 bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs px-4 py-2 rounded-full">
             <ShieldCheck className="w-4 h-4 text-accent-green" />
@@ -114,9 +114,9 @@ export default function Home({ onNavigate, onFilterCategory, onViewDetails }) {
             <div
               key={cat.name}
               onClick={() => handleCategoryClick(cat.tag)}
-              className="bg-card-dark border border-border-dark hover:border-accent-green/50 p-6 rounded-xl cursor-pointer group hover:bg-zinc-900/20 transition-all select-none flex items-start gap-4"
+              className="bg-card-dark border border-zinc-700/80 hover:border-accent-green/50 p-6 rounded-xl cursor-pointer group hover:bg-zinc-900/20 transition-all select-none flex items-start gap-4 shadow-lg shadow-black/20"
             >
-              <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800 group-hover:border-accent-green/20 group-hover:bg-accent-green/5 transition-all">
+              <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-700/60 group-hover:border-accent-green/20 group-hover:bg-accent-green/5 transition-all">
                 {cat.icon}
               </div>
               <div className="space-y-1">

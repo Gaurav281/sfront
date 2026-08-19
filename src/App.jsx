@@ -13,7 +13,6 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
-import Tutorial from './components/Tutorial'; // Imported tutorial system
 import { useAuthStore } from './store/useAuthStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, User, LogOut } from 'lucide-react';
@@ -28,8 +27,7 @@ export default function App() {
   // Mobile drawer state managed at root level
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Tutorial Tour State (active if not completed before)
-  const [tutorialActive, setTutorialActive] = useState(localStorage.getItem('tutorialCompleted') !== 'true');
+  // Onboarding tutorial removed
   
   const { user, logout } = useAuthStore();
   const isAdmin = user && user.role === 'admin';
@@ -135,7 +133,7 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 pt-2 pb-20 md:py-8 md:pb-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 pt-0 pb-20 md:pt-2 md:pb-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={activePage}
@@ -296,15 +294,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Onboarding tour tutorial overlay */}
-      {tutorialActive && (
-        <Tutorial
-          activePage={activePage}
-          onNavigate={handleNavigate}
-          user={user}
-          onComplete={() => setTutorialActive(false)}
-        />
-      )}
+      {/* Onboarding tour tutorial overlay removed */}
 
     </div>
   );
