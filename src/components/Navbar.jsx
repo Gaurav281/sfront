@@ -1,15 +1,14 @@
 import React from 'react';
-import { ShoppingCart, LogOut, User, Menu, X, Home, Search, MessageSquare } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ShoppingCart, LogOut, User, Menu, Home, Search, MessageSquare } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
 import apiClient from '../api/apiClient';
 
-export default function Navbar({ activePage, onNavigate }) {
+export default function Navbar({ activePage, onNavigate, mobileMenuOpen, setMobileMenuOpen }) {
   const { items, toggleCart } = useCartStore();
   const { user, logout } = useAuthStore();
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const cartCount = items.length;
   const isAdmin = user && user.role === 'admin';
@@ -29,16 +28,11 @@ export default function Navbar({ activePage, onNavigate }) {
 
   const navLinks = [
     { name: 'Home', id: 'home' },
-    { name: 'Shop', id: 'shop' }, // Renamed from "Shop Assets" to "Shop"
+    { name: 'Shop', id: 'shop' },
     { name: 'About Us', id: 'about' },
     { name: 'Support Chat', id: 'contact' },
     { name: 'Terms & Conditions', id: 'terms' },
   ];
-
-  const handleMobileNavClick = (pageId) => {
-    setMobileMenuOpen(false);
-    onNavigate(pageId);
-  };
 
   return (
     <>
@@ -53,8 +47,8 @@ export default function Navbar({ activePage, onNavigate }) {
               <div className="w-8 h-8 rounded-lg bg-accent-green flex items-center justify-center font-black text-black text-lg">
                 Ω
               </div>
-              <span className="text-white font-extrabold text-lg tracking-wider">
-                DIGI<span className="text-accent-green">VAULT</span>
+              <span className="text-white font-extrabold text-sm sm:text-base tracking-wider uppercase">
+                DIGITAL<span className="text-accent-green"> SERVICE PRO</span>
               </span>
             </div>
 
@@ -153,7 +147,7 @@ export default function Navbar({ activePage, onNavigate }) {
               )}
             </div>
 
-            {/* Mobile hamburger menu */}
+            {/* Mobile menu trigger */}
             <div className="md:hidden flex items-center gap-3">
               {/* Cart Button */}
               <button
@@ -177,139 +171,6 @@ export default function Navbar({ activePage, onNavigate }) {
             </div>
           </div>
         </div>
-
-        {/* Mobile Right-Sliding Drawer Menu */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <div className="fixed inset-0 z-50 flex justify-end">
-              {/* Backdrop - Explicit Inline Styling to Prevent Transparency */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setMobileMenuOpen(false)}
-                className="absolute inset-0 cursor-pointer"
-                style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
-              />
-
-              {/* Sidebar Menu Panel - Solid Black Inline Styling */}
-              <motion.div
-                initial={{ x: '100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '100%' }}
-                transition={{ type: 'tween', ease: 'easeOut', duration: 0.25 }}
-                className="relative w-full max-w-[280px] h-full flex flex-col justify-between p-6 shadow-2xl z-10"
-                style={{ backgroundColor: '#070707', borderLeft: '1px solid #1E1E1E' }}
-              >
-                <div>
-                  {/* Header */}
-                  <div className="flex justify-between items-center pb-6 border-b border-zinc-900">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-md bg-accent-green flex items-center justify-center font-black text-black text-xs">
-                        Ω
-                      </div>
-                      <span className="text-white font-extrabold text-sm tracking-wider">Menu</span>
-                    </div>
-                    <button
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="p-1 rounded-lg hover:bg-zinc-900 text-zinc-400 hover:text-white transition-colors"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  {/* Nav links */}
-                  <div className="mt-6 flex flex-col gap-2">
-                    {navLinks.map((link) => (
-                      <button
-                        key={link.id}
-                        onClick={() => handleMobileNavClick(link.id)}
-                        className={`w-full text-left py-2.5 px-3 rounded-lg text-xs font-semibold tracking-wide border transition-all flex items-center justify-between cursor-pointer ${
-                          activePage === link.id
-                            ? 'bg-zinc-900 text-accent-green border-zinc-800 font-bold'
-                            : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white border-transparent'
-                        }`}
-                      >
-                        <span>{link.name}</span>
-                        {link.id === 'contact' && unreadCount > 0 && (
-                          <span className="w-4 h-4 rounded-full bg-accent-green text-black font-extrabold text-[8px] flex items-center justify-center">
-                            {unreadCount}
-                          </span>
-                        )}
-                      </button>
-                    ))}
-
-                    {/* Profile */}
-                    {user && (
-                      <button
-                        onClick={() => handleMobileNavClick('profile')}
-                        className={`w-full text-left py-2.5 px-3 rounded-lg text-xs font-semibold tracking-wide border transition-all cursor-pointer ${
-                          activePage === 'profile'
-                            ? 'bg-zinc-900 text-accent-green border-zinc-800 font-bold'
-                            : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white border-transparent'
-                        }`}
-                      >
-                        My Profile
-                      </button>
-                    )}
-
-                    {/* Admin Dashboard */}
-                    {isAdmin && (
-                      <button
-                        onClick={() => handleMobileNavClick('admin')}
-                        className={`w-full text-left py-2.5 px-3 rounded-lg text-xs font-bold tracking-wide border mt-2 transition-all cursor-pointer ${
-                          activePage === 'admin'
-                            ? 'bg-accent-green/10 text-accent-green border-accent-green/20'
-                            : 'text-zinc-300 bg-zinc-900/40 hover:bg-zinc-900 hover:text-white border-border-dark'
-                        }`}
-                      >
-                        Admin Dashboard
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {/* Footer */}
-                <div className="pt-6 border-t border-zinc-900">
-                  {user ? (
-                    <div className="flex flex-col gap-3">
-                      <span className="text-zinc-400 text-xs truncate flex items-center gap-1.5">
-                        <User className="w-4 h-4 text-accent-green shrink-0" />
-                        <span className="truncate">{user.name || user.email}</span>
-                      </span>
-                      <button
-                        onClick={() => {
-                          logout();
-                          setMobileMenuOpen(false);
-                          onNavigate('home');
-                        }}
-                        className="flex items-center justify-center gap-1.5 w-full bg-red-950/40 border border-red-900/50 hover:bg-red-900/40 text-red-400 font-bold py-2.5 rounded-xl transition-all text-xs cursor-pointer"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        <span>Logout Account</span>
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        onClick={() => handleMobileNavClick('login')}
-                        className="text-center font-bold text-zinc-300 py-2 border border-zinc-900 rounded-xl text-xs hover:bg-zinc-900 cursor-pointer"
-                      >
-                        Login
-                      </button>
-                      <button
-                        onClick={() => handleMobileNavClick('signup')}
-                        className="text-center bg-accent-green text-black font-bold py-2 rounded-xl text-xs cursor-pointer"
-                      >
-                        Sign Up
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>
       </nav>
 
       {/* Fixed Bottom Navigation Bar for Mobile viewports */}

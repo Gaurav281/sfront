@@ -95,7 +95,7 @@ export default function ContactUs() {
             OP
           </div>
           <div>
-            <h4 className="text-xs font-bold text-white">DigiVault Support Desk</h4>
+            <h4 className="text-xs font-bold text-white">Digital Service Pro Support Desk</h4>
             <span className="text-[9px] text-zinc-500 block">Typically replies in a few minutes</span>
           </div>
         </div>

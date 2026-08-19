@@ -52,8 +52,8 @@ export default function Footer({ onNavigate }) {
             <div className="w-7 h-7 rounded-md bg-accent-green flex items-center justify-center font-black text-black text-sm">
               Ω
             </div>
-            <span className="text-white font-extrabold text-sm tracking-wider">
-              DIGI<span className="text-accent-green">VAULT</span>
+            <span className="text-white font-extrabold text-sm tracking-wider uppercase">
+              DIGITAL<span className="text-accent-green"> SERVICE PRO</span>
             </span>
           </div>
 
@@ -66,7 +66,7 @@ export default function Footer({ onNavigate }) {
           </div>
 
           <p className="text-[10px] text-zinc-600">
-            © {new Date().getFullYear()} DigiVault Marketplace. All rights reserved.
+            © {new Date().getFullYear()} Digital Service Pro. All rights reserved.
           </p>
         </div>
       </div>

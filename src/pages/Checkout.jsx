@@ -126,7 +126,7 @@ export default function Checkout({ onNavigate }) {
           <div className="w-full bg-zinc-950 border border-zinc-900/60 p-4 rounded-xl text-left space-y-2 text-xs">
             <div className="flex justify-between items-center text-zinc-500">
               <span>Paid to</span>
-              <span className="text-zinc-300 font-bold">DigiVault Protection Hub</span>
+              <span className="text-zinc-300 font-bold">Digital Service Pro Protection Hub</span>
             </div>
             <div className="flex justify-between items-center text-zinc-500">
               <span>Delivery Handle</span>
@@ -180,12 +180,12 @@ export default function Checkout({ onNavigate }) {
             {/* Header block */}
             <div className="bg-card-dark border border-border-dark p-6 rounded-2xl flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center font-bold text-accent-green">
-                  DV
+                <div className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center font-bold text-accent-green text-xs">
+                  DSP
                 </div>
                 <div>
                   <p className="text-xs text-zinc-500 uppercase tracking-widest font-bold">Paying Merchant</p>
-                  <h2 className="text-sm font-bold text-white">DigiVault Secured Payments</h2>
+                  <h2 className="text-sm font-bold text-white">Digital Service Pro Secured Payments</h2>
                 </div>
               </div>
               <div className="text-right">

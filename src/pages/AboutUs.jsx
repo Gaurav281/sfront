@@ -12,7 +12,7 @@ export default function AboutUs() {
     {
       num: '2',
       title: 'Lock Payment Securely',
-      desc: 'Pay using Google Pay, Paytm, or PhonePe. Your money is safely locked by DigiVault. It is NOT given to the seller until you verify the details.',
+      desc: 'Pay using Google Pay, Paytm, or PhonePe. Your money is safely locked by Digital Service Pro. It is NOT given to the seller until you verify the details.',
       icon: <ShieldAlert className="w-5 h-5 text-accent-green" />,
     },
     {
@@ -41,7 +41,7 @@ export default function AboutUs() {
       {/* Title */}
       <div className="text-center space-y-4 max-w-2xl mx-auto">
         <h1 className="text-3xl md:text-4xl font-extrabold text-white">
-          How <span className="text-accent-green">DigiVault</span> Works
+          How <span className="text-accent-green">Digital Service Pro</span> Works
         </h1>
         <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
           We make buying and selling digital assets safe and simple. Here is the step-by-step process of how we protect your money and ensure successful transfers.
@@ -84,7 +84,7 @@ export default function AboutUs() {
           Aapka Paisa Safe Hai. We keep your payments locked until you receive what you paid for.
         </p>
         <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">
-          DigiVault Protection Policy
+          Digital Service Pro Protection Policy
         </p>
       </div>
 
