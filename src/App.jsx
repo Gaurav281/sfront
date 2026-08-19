@@ -32,6 +32,33 @@ export default function App() {
   const { user, logout } = useAuthStore();
   const isAdmin = user && user.role === 'admin';
 
+  // Synchronize route history back/forward button clicks
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (event.state && event.state.page) {
+        setActivePage(event.state.page);
+      } else {
+        const hash = window.location.hash.replace('#/', '');
+        setActivePage(hash || 'home');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    // Initial routing check on reload
+    const initialHash = window.location.hash.replace('#/', '');
+    if (initialHash) {
+      setActivePage(initialHash);
+      window.history.replaceState({ page: initialHash }, '', `#/${initialHash}`);
+    } else {
+      window.history.replaceState({ page: 'home' }, '', '#/home');
+    }
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+
   // React Query to fetch unread support chat count for mobile drawer notification
   const { data: unreadData } = useQuery({
     queryKey: ['chatUnreadCount', user?._id],
@@ -54,6 +81,10 @@ export default function App() {
   ];
 
   const handleNavigate = (page) => {
+    // Push route state to window history
+    if (page !== activePage) {
+      window.history.pushState({ page }, '', `#/${page}`);
+    }
     if (page === 'admin' && !isAdmin) {
       setActivePage('home');
     } else if (page === 'profile' && !user) {
