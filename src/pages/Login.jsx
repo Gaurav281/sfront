@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import { Mail, Lock, Key, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
+import { useAlertStore } from '../store/useAlertStore';
 
 export default function Login({ onNavigate }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false); // State to show/hide password
   const { login, error, loading, clearError } = useAuthStore();
+  const addToast = useAlertStore((state) => state.addToast);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     clearError();
     const success = await login(email, password);
     if (success) {
+      addToast('Logged in successfully!', 'success');
       onNavigate('home');
+    } else {
+      addToast('Failed to login. Please check your password.', 'error');
     }
   };
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Lock, User, Key, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
+import { useAlertStore } from '../store/useAlertStore';
 
 export default function Signup({ onNavigate }) {
   const [name, setName] = useState('');
@@ -14,6 +15,7 @@ export default function Signup({ onNavigate }) {
 
   const [validationError, setValidationError] = useState('');
   const { signup, error, loading, clearError } = useAuthStore();
+  const addToast = useAlertStore((state) => state.addToast);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,17 +24,22 @@ export default function Signup({ onNavigate }) {
 
     if (password.length < 6) {
       setValidationError('Password must be at least 6 characters long');
+      addToast('Password must be at least 6 characters long', 'error');
       return;
     }
 
     if (password !== confirmPassword) {
       setValidationError('Passwords do not match');
+      addToast('Passwords do not match', 'error');
       return;
     }
 
     const success = await signup(name, email, password);
     if (success) {
+      addToast('Account registered successfully!', 'success');
       onNavigate('home');
+    } else {
+      addToast('Failed to register. Email might be in use.', 'error');
     }
   };
 

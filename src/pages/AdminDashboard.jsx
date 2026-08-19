@@ -3,10 +3,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../store/useAuthStore';
 import { ShieldCheck, Plus, Trash2, Edit2, TrendingUp, Users, ShoppingCart, MessageCircle, PlusCircle, Send, Check } from 'lucide-react';
 import apiClient from '../api/apiClient';
+import { useAlertStore } from '../store/useAlertStore';
 
 export default function AdminDashboard() {
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
+  const showConfirm = useAlertStore((state) => state.showConfirm);
+  const addToast = useAlertStore((state) => state.addToast);
   
   // Navigation states
   const [activeTab, setActiveTab] = useState('overview');
@@ -143,6 +146,7 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ['listings'] });
       queryClient.invalidateQueries({ queryKey: ['recentListings'] });
       resetForm();
+      addToast('Listing created successfully!', 'success');
     },
   });
 
@@ -156,6 +160,7 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ['recentListings'] });
       setEditingListing(null);
       resetForm();
+      addToast('Listing updated successfully!', 'success');
     },
   });
 
@@ -168,6 +173,7 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ['adminStats'] });
       queryClient.invalidateQueries({ queryKey: ['listings'] });
       queryClient.invalidateQueries({ queryKey: ['recentListings'] });
+      addToast('Listing deleted successfully!', 'success');
     },
   });
 
@@ -261,9 +267,11 @@ export default function AdminDashboard() {
   };
 
   const handleDeleteClick = (id) => {
-    if (window.confirm('Are you sure you want to delete this listing?')) {
-      deleteListingMutation.mutate(id);
-    }
+    showConfirm(
+      'Delete Listing',
+      'Are you sure you want to delete this listing?',
+      () => deleteListingMutation.mutate(id)
+    );
   };
 
   const handleBulkCategoryDiscountSubmit = async (e) => {
@@ -958,18 +966,23 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex gap-3 items-center">
                       <button
-                        onClick={async () => {
-                          if (window.confirm('Delete all messages in this thread from both ends?')) {
-                            try {
-                              await apiClient.delete(`/chat/admin/clear/${selectedChatUserId}`);
-                              queryClient.invalidateQueries({ queryKey: ['adminSelectedMessages', selectedChatUserId] });
-                              queryClient.invalidateQueries({ queryKey: ['adminChatUsers'] });
-                            } catch (err) {
-                              alert('Failed to delete chat thread');
+                        onClick={() => {
+                          showConfirm(
+                            'Delete Chat Thread',
+                            'Delete all messages in this thread from both ends?',
+                            async () => {
+                              try {
+                                await apiClient.delete(`/chat/admin/clear/${selectedChatUserId}`);
+                                queryClient.invalidateQueries({ queryKey: ['adminSelectedMessages', selectedChatUserId] });
+                                queryClient.invalidateQueries({ queryKey: ['adminChatUsers'] });
+                                addToast('Chat thread deleted successfully.', 'success');
+                              } catch (err) {
+                                addToast('Failed to delete chat thread.', 'error');
+                              }
                             }
-                          }
+                          );
                         }}
-                        className="text-[10px] text-red-500 hover:text-red-400 font-bold"
+                        className="text-[10px] text-red-500 hover:text-red-400 font-bold animate-pulse"
                       >
                         Delete Thread
                       </button>

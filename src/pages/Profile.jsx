@@ -3,10 +3,12 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '../store/useAuthStore';
 import { User, Mail, Lock, ShoppingBag, Edit, Check, ShieldCheck, Calendar, Info, LogOut } from 'lucide-react';
 import apiClient from '../api/apiClient';
+import { useAlertStore } from '../store/useAlertStore';
 
 export default function Profile() {
   const { user, updateUserProfileState, logout } = useAuthStore();
   const [activeSubTab, setActiveSubTab] = useState('settings'); // 'settings' or 'history'
+  const addToast = useAlertStore((state) => state.addToast);
 
   // Profile form states
   const [name, setName] = useState(user?.name || '');
@@ -36,13 +38,18 @@ export default function Profile() {
       const res = await apiClient.put('/auth/profile', payload);
       return res.data;
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       updateUserProfileState(data);
-      setProfileSuccess(true);
-      setTimeout(() => setProfileSuccess(false), 3000);
+      if (!variables.password) {
+        setProfileSuccess(true);
+        addToast('Profile details updated successfully!', 'success');
+        setTimeout(() => setProfileSuccess(false), 3000);
+      }
     },
     onError: (err) => {
-      setProfileError(err.response?.data?.message || 'Failed to update profile');
+      const msg = err.response?.data?.message || 'Failed to update profile';
+      setProfileError(msg);
+      addToast(msg, 'error');
     },
   });
 
@@ -59,11 +66,13 @@ export default function Profile() {
 
     if (password.length < 6) {
       setPasswordError('New password must be at least 6 characters long');
+      addToast('New password must be at least 6 characters long', 'error');
       return;
     }
 
     if (password !== confirmPassword) {
       setPasswordError('Passwords do not match');
+      addToast('Passwords do not match', 'error');
       return;
     }
 
@@ -74,6 +83,7 @@ export default function Profile() {
           setPassword('');
           setConfirmPassword('');
           setPasswordSuccess(true);
+          addToast('Password changed successfully!', 'success');
           setTimeout(() => setPasswordSuccess(false), 3000);
         },
       }

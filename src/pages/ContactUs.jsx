@@ -3,10 +3,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../store/useAuthStore';
 import { Send, ShieldCheck, User, MessageSquare, Trash } from 'lucide-react';
 import apiClient from '../api/apiClient';
+import { useAlertStore } from '../store/useAlertStore';
 
 export default function ContactUs() {
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
+  const showConfirm = useAlertStore((state) => state.showConfirm);
+  const addToast = useAlertStore((state) => state.addToast);
   const [text, setText] = useState('');
   const messagesEndRef = useRef(null);
   const prevCountRef = useRef(0);
@@ -55,6 +58,7 @@ export default function ContactUs() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chatMessages'] });
+      addToast('Chat messages cleared successfully.', 'success');
     },
   });
 
@@ -65,9 +69,11 @@ export default function ContactUs() {
   };
 
   const handleClearChat = () => {
-    if (window.confirm('Delete all messages in this thread from both ends? This cannot be undone.')) {
-      clearChatMutation.mutate();
-    }
+    showConfirm(
+      'Clear Conversation',
+      'Delete all messages in this thread from both ends? This cannot be undone.',
+      () => clearChatMutation.mutate()
+    );
   };
 
   if (!user) {

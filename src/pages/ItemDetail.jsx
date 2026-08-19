@@ -1,9 +1,11 @@
 import React from 'react';
 import { ShieldCheck, ArrowLeft, Plus, Trash, Clock, User, Sparkles, AlertCircle } from 'lucide-react';
 import { useCartStore } from '../store/useCartStore';
+import { useAlertStore } from '../store/useAlertStore';
 
 export default function ItemDetail({ listing, onNavigate }) {
   const { addToCart, items, removeFromCart } = useCartStore();
+  const addToast = useAlertStore((state) => state.addToast);
 
   if (!listing) {
     return (
@@ -33,6 +35,7 @@ export default function ItemDetail({ listing, onNavigate }) {
   const handleCartAction = () => {
     if (isInCart) {
       removeFromCart(listing._id);
+      addToast('Removed from cart', 'info');
     } else {
       const result = addToCart({
         listing: listing._id,
@@ -43,7 +46,9 @@ export default function ItemDetail({ listing, onNavigate }) {
         platform: listing.platform,
       });
       if (result && !result.success) {
-        alert(result.message);
+        addToast(result.message, 'error');
+      } else {
+        addToast('Added to cart successfully!', 'success');
       }
     }
   };

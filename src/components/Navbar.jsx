@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
+import { useAlertStore } from '../store/useAlertStore';
 import apiClient from '../api/apiClient';
 
 export default function Navbar({ activePage, onNavigate, mobileMenuOpen, setMobileMenuOpen }) {
@@ -126,6 +127,8 @@ export default function Navbar({ activePage, onNavigate, mobileMenuOpen, setMobi
                     onClick={() => {
                       logout();
                       onNavigate('home');
+                      const addToast = useAlertStore.getState().addToast;
+                      addToast('Logged out successfully.', 'info');
                     }}
                     className="p-1.5 rounded-md text-zinc-500 hover:text-red-500 hover:bg-zinc-800/40 transition-all cursor-pointer"
                     title="Logout"

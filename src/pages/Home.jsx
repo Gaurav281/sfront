@@ -172,16 +172,16 @@ export default function Home({ onNavigate, onFilterCategory, onViewDetails }) {
 
       {/* Security CTA section */}
       <section className="max-w-4xl mx-auto px-4">
-        <div className="bg-zinc-950 border border-border-dark p-8 sm:p-10 rounded-2xl flex flex-col sm:flex-row items-center gap-6 justify-between">
+        <div className="bg-zinc-950 border border-zinc-700/80 p-8 sm:p-10 rounded-2xl flex flex-col sm:flex-row items-center gap-6 justify-between shadow-lg">
           <div className="space-y-2 text-center sm:text-left">
-            <h3 className="text-white font-extrabold text-lg">Safe escrow trade environment</h3>
-            <p className="text-zinc-400 text-xs max-w-md leading-relaxed">
-              We protect both transacting parties. Sellers get guaranteed payouts, and buyers get verified assets or immediate refunds.
+            <h3 className="text-white font-extrabold text-lg">Safe Pay Lock: 100% Protection</h3>
+            <p className="text-zinc-400 text-xs max-w-md leading-relaxed font-semibold">
+              Your money is safe with us. We pay the seller only after you get the login credentials. Get an instant refund if delivery fails.
             </p>
           </div>
           <button
             onClick={() => onNavigate('contact')}
-            className="bg-zinc-900 hover:bg-zinc-800 text-white font-semibold text-xs py-3 px-5 rounded-xl border border-zinc-800 transition-colors shrink-0 whitespace-nowrap cursor-pointer"
+            className="bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs py-3.5 px-6 rounded-xl border border-zinc-800 transition-colors shrink-0 whitespace-nowrap cursor-pointer"
           >
             Contact Support Desk
           </button>

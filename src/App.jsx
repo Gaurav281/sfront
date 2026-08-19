@@ -13,6 +13,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
+import CustomPopup from './components/CustomPopup';
 import { useAuthStore } from './store/useAuthStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, User, LogOut } from 'lucide-react';
@@ -319,6 +320,7 @@ export default function App() {
 
       {/* Onboarding tour tutorial overlay removed */}
 
+      <CustomPopup />
     </div>
   );
 }

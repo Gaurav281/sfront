@@ -2,9 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Instagram, Youtube, Tv, Search, Palette, Plus, Eye } from 'lucide-react';
 import { useCartStore } from '../store/useCartStore';
+import { useAlertStore } from '../store/useAlertStore';
 
 export default function Card({ listing, onViewDetails }) {
   const addToCart = useCartStore((state) => state.addToCart);
+  const addToast = useAlertStore((state) => state.addToast);
 
   // Helper to calculate discounted price
   const getDiscountedPrice = (price, discount) => {
@@ -55,7 +57,9 @@ export default function Card({ listing, onViewDetails }) {
       platform: listing.platform,
     });
     if (result && !result.success) {
-      alert(result.message);
+      addToast(result.message, 'error');
+    } else {
+      addToast('Added to cart successfully!', 'success');
     }
   };
 
