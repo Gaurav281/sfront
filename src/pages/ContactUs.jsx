@@ -93,7 +93,7 @@ export default function ContactUs() {
   }
 
   return (
-    <div className="max-w-6xl w-full mx-auto px-4 py-4 select-none space-y-4">
+    <div className="max-w-6xl w-full mx-auto px-4 py-4 space-y-4">
       
       {/* Page Header */}
       <div className="border-b border-border-dark pb-6 flex justify-between items-end flex-wrap gap-4">

@@ -38,6 +38,8 @@ export default function AdminDashboard() {
   const [revisionCount, setRevisionCount] = useState('');
   const [monetized, setMonetized] = useState(false);
   const [status, setStatus] = useState('available');
+  const [username, setUsername] = useState('');
+  const [profileLink, setProfileLink] = useState('');
 
   // Bulk category discount state variables
   const [bulkCategory, setBulkCategory] = useState('Instagram Accounts');
@@ -211,6 +213,8 @@ export default function AdminDashboard() {
     setRevisionCount('');
     setMonetized(false);
     setStatus('available');
+    setUsername('');
+    setProfileLink('');
   };
 
   const handleEditClick = (listing) => {
@@ -232,6 +236,8 @@ export default function AdminDashboard() {
     setAge(listing.specs?.age || '');
     setRevisionCount(listing.specs?.revisionCount || '');
     setMonetized(listing.specs?.monetized || false);
+    setUsername(listing.specs?.username || '');
+    setProfileLink(listing.specs?.profileLink || '');
   };
 
   const handleFormSubmit = (e) => {
@@ -245,6 +251,8 @@ export default function AdminDashboard() {
       age,
       revisionCount,
       monetized,
+      username,
+      profileLink,
     };
 
     const listingPayload = {
@@ -578,6 +586,32 @@ export default function AdminDashboard() {
                           Monetization Approved / Active Adsense
                         </label>
                       </div>
+
+                      {/* Username and profileLink fields for IG/YouTube Channels */}
+                      {['Instagram Accounts', 'YouTube Channels'].includes(category) && (
+                        <div className="grid grid-cols-2 gap-3 border-t border-zinc-900 pt-2.5 mt-1">
+                          <div className="space-y-1">
+                            <label className="text-[8px] uppercase tracking-wider text-zinc-500 block font-bold">Username / Handle</label>
+                            <input
+                              type="text"
+                              value={username}
+                              onChange={(e) => setUsername(e.target.value)}
+                              placeholder="e.g. @fashionHub"
+                              className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-[8px] uppercase tracking-wider text-zinc-500 block font-bold">Profile URL Link</label>
+                            <input
+                              type="text"
+                              value={profileLink}
+                              onChange={(e) => setProfileLink(e.target.value)}
+                              placeholder="e.g. https://instagram.com/fashionHub"
+                              className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
 

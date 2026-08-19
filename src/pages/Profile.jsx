@@ -311,18 +311,18 @@ export default function Profile() {
                       {order.items?.map((item, index) => (
                         <div
                           key={index}
-                          className="bg-zinc-900/30 border border-zinc-900/60 px-4 py-3 rounded-xl flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs"
+                          className="bg-zinc-900/30 border border-zinc-900/60 px-4 py-3 rounded-xl flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 text-xs"
                         >
-                          <div className="flex items-center gap-2 min-w-0">
-                            <span className="text-[8px] font-black text-accent-green bg-accent-green/5 border border-accent-green/10 px-1.5 py-0.5 rounded shrink-0">
+                          <div className="flex items-start gap-2 min-w-0 flex-wrap sm:flex-nowrap">
+                            <span className="text-[8px] font-black text-accent-green bg-accent-green/5 border border-accent-green/10 px-1.5 py-0.5 rounded shrink-0 mt-0.5">
                               {item.platform}
                             </span>
-                            <span className="text-white font-bold truncate">{item.title}</span>
+                            <span className="text-white font-bold break-words whitespace-normal leading-normal">{item.title}</span>
                           </div>
                           
                           {/* Validity Indicator */}
-                          <div className="flex items-center justify-between sm:justify-end gap-4">
-                            <span className="text-[10px] text-zinc-400 font-semibold border border-zinc-800/60 bg-zinc-950 px-2 py-0.5 rounded">
+                          <div className="flex items-center justify-between sm:justify-end gap-3 flex-wrap shrink-0 mt-1 sm:mt-0">
+                            <span className="text-[10px] text-zinc-400 font-semibold border border-zinc-800/60 bg-zinc-950 px-2 py-0.5 rounded whitespace-nowrap">
                               Validity: {getItemValidity(item)}
                             </span>
                             <span className="text-zinc-300 font-extrabold shrink-0">₹{item.price}</span>

@@ -2,9 +2,13 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trash2, ShoppingCart, ArrowRight } from 'lucide-react';
 import { useCartStore } from '../store/useCartStore';
+import { useAuthStore } from '../store/useAuthStore';
+import { useAlertStore } from '../store/useAlertStore';
 
 export default function SidebarCart({ onCheckoutNavigate }) {
   const { items, cartOpen, setCartOpen, removeFromCart, getTotalPrice } = useCartStore();
+  const { user } = useAuthStore();
+  const addToast = useAlertStore((state) => state.addToast);
 
   if (!cartOpen) return null;
 
@@ -119,9 +123,14 @@ export default function SidebarCart({ onCheckoutNavigate }) {
                 <button
                   onClick={() => {
                     setCartOpen(false);
-                    onCheckoutNavigate();
+                    if (!user) {
+                      addToast('Please login to complete your checkout.', 'info');
+                      window.location.hash = '#/login';
+                    } else {
+                      onCheckoutNavigate();
+                    }
                   }}
-                  className="flex-[2] flex items-center justify-center gap-1.5 bg-accent-green hover:bg-accent-green-hover text-black font-bold py-3 px-4 rounded-xl transition-all text-xs"
+                  className="flex-[2] flex items-center justify-center gap-1.5 bg-accent-green hover:bg-accent-green-hover text-black font-bold py-3 px-4 rounded-xl transition-all text-xs cursor-pointer"
                 >
                   <span>Checkout Now</span>
                   <ArrowRight className="w-4 h-4" />

@@ -1,12 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Instagram, Youtube, Tv, Search, Palette, Plus, Eye } from 'lucide-react';
+import { Instagram, Youtube, Tv, Search, Palette, Plus, Eye, ExternalLink } from 'lucide-react';
 import { useCartStore } from '../store/useCartStore';
 import { useAlertStore } from '../store/useAlertStore';
+import { useAuthStore } from '../store/useAuthStore';
 
 export default function Card({ listing, onViewDetails }) {
   const addToCart = useCartStore((state) => state.addToCart);
   const addToast = useAlertStore((state) => state.addToast);
+  const user = useAuthStore((state) => state.user);
 
   // Helper to calculate discounted price
   const getDiscountedPrice = (price, discount) => {
@@ -21,28 +23,28 @@ export default function Card({ listing, onViewDetails }) {
   const getPlatformIcon = (platform) => {
     switch (platform.toLowerCase()) {
       case 'instagram':
-        return <Instagram className="w-4.5 h-4.5 text-pink-500" />;
+        return <Instagram className="w-4 h-4 text-pink-500" />;
       case 'youtube':
-        return <Youtube className="w-4.5 h-4.5 text-red-500" />;
+        return <Youtube className="w-4 h-4 text-red-500" />;
       case 'tiktok':
         return (
-          <svg className="w-4.5 h-4.5 text-cyan-400 fill-current" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 text-cyan-400 fill-current" viewBox="0 0 24 24">
             <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.88 2.85 2.1 3.59.83.5 1.78.73 2.73.74v3.29c-1.34 0-2.62-.38-3.72-1.11-.29-.19-.55-.41-.79-.65v7.02c0 3.76-2.3 7.12-6 8.04-3.7.92-7.61-1.01-9-4.55C.42 12.83 2.1 8.7 5.75 7.55c.78-.25 1.6-.33 2.42-.25v3.39c-.83-.22-1.72-.08-2.46.4-.95.62-1.48 1.71-1.38 2.83.1 1.13.8 2.1 1.83 2.53.97.4 2.1.2 2.87-.5.53-.48.77-1.16.76-1.87.01-2.58.01-9.98.01-12.55.59-.44 1.17-.9 1.73-1.53z" />
           </svg>
         );
       case 'netflix':
       case 'spotify':
       case 'streaming':
-        return <Tv className="w-4.5 h-4.5 text-emerald-400" />;
+        return <Tv className="w-4 h-4 text-emerald-400" />;
       case 'google seo':
       case 'website seo':
       case 'seo':
-        return <Search className="w-4.5 h-4.5 text-blue-400" />;
+        return <Search className="w-4 h-4 text-blue-400" />;
       case 'design':
       case 'graphics':
-        return <Palette className="w-4.5 h-4.5 text-purple-400" />;
+        return <Palette className="w-4 h-4 text-purple-400" />;
       default:
-        return <Tv className="w-4.5 h-4.5 text-zinc-400" />;
+        return <Tv className="w-4 h-4 text-zinc-400" />;
     }
   };
 
@@ -116,6 +118,11 @@ export default function Card({ listing, onViewDetails }) {
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
+    if (!user) {
+      addToast('Please login to purchase items.', 'info');
+      window.location.hash = '#/login';
+      return;
+    }
     const result = addToCart({
       listing: listing._id,
       _id: listing._id,
@@ -134,6 +141,8 @@ export default function Card({ listing, onViewDetails }) {
   const followersSpec = listing.specs?.followers;
   const nicheSpec = listing.specs?.niche;
   const deliverySpec = listing.specs?.deliveryTime;
+  const usernameSpec = listing.specs?.username;
+  const linkSpec = listing.specs?.profileLink;
 
   return (
     <motion.div
@@ -142,7 +151,7 @@ export default function Card({ listing, onViewDetails }) {
       whileHover={{ y: -6 }}
       transition={{ duration: 0.25 }}
       onClick={() => onViewDetails(listing)}
-      className={`bg-[#0c0c0d] border border-zinc-700/80 rounded-2xl p-5 pt-7 flex flex-col justify-between h-[360px] cursor-pointer group select-none transition-all duration-300 relative overflow-hidden shadow-lg shadow-black/35 hover:bg-zinc-900/10 ${brand.hoverBorder}`}
+      className={`bg-[#0c0c0d] border border-zinc-700/80 rounded-2xl p-5 pt-7 flex flex-col justify-between h-[310px] cursor-pointer group select-none transition-all duration-300 relative overflow-hidden shadow-lg shadow-black/35 hover:bg-zinc-900/10 ${brand.hoverBorder}`}
     >
       {/* Brand accent gradient strip at top of card */}
       <div className={`h-1 w-full absolute top-0 left-0 ${brand.gradientStrip}`} />
@@ -180,20 +189,38 @@ export default function Card({ listing, onViewDetails }) {
         </div>
 
         {/* Title */}
-        <h3 className={`text-xs md:text-sm font-black text-white mb-2 transition-colors line-clamp-2 leading-relaxed ${brand.textHighlight}`}>
+        <h3 className={`text-xs md:text-sm font-black text-white mb-2.5 transition-colors line-clamp-2 leading-relaxed ${brand.textHighlight}`}>
           {listing.title}
         </h3>
 
-        {/* Description */}
-        <p className="text-zinc-400 text-[11px] leading-relaxed line-clamp-3 mb-4 font-medium">
-          {listing.description}
-        </p>
+        {/* Username/Profile Link for Instagram & YouTube */}
+        {usernameSpec && (
+          <div 
+            onClick={(e) => e.stopPropagation()} 
+            className="flex items-center justify-between bg-zinc-950/60 border border-zinc-900 px-3 py-1.5 rounded-xl text-[10px] mb-3 font-semibold"
+          >
+            <span className="text-zinc-300 font-extrabold truncate mr-2">{usernameSpec}</span>
+            {linkSpec && (
+              <a
+                href={linkSpec}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center gap-0.5 text-[9px] uppercase font-black hover:underline shrink-0 ${
+                  listing.platform.toLowerCase().includes('instagram') ? 'text-pink-400 hover:text-pink-300' : 'text-red-400 hover:text-red-300'
+                }`}
+              >
+                <span>Visit</span>
+                <ExternalLink className="w-2.5 h-2.5" />
+              </a>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Specs / CTA section */}
       <div>
         {/* Platform tag display when discount is active (to keep icons visible) */}
-        {hasDiscount && (
+        {hasDiscount && !usernameSpec && (
           <div className={`inline-flex items-center gap-1.5 border px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider mb-3 ${brand.badge}`}>
             {getPlatformIcon(listing.platform)}
             <span>{listing.platform}</span>
@@ -202,17 +229,17 @@ export default function Card({ listing, onViewDetails }) {
 
         <div className="flex flex-wrap gap-1.5 mb-4">
           {followersSpec && (
-            <span className="bg-zinc-950/80 border border-zinc-800/80 text-zinc-300 text-[10px] px-2.5 py-0.5 rounded-full font-bold">
+            <span className="bg-zinc-950/80 border border-zinc-800/80 text-zinc-300 text-[9px] px-2.5 py-0.5 rounded-full font-bold">
               {followersSpec}
             </span>
           )}
           {nicheSpec && (
-            <span className="bg-zinc-950/80 border border-zinc-800/80 text-zinc-300 text-[10px] px-2.5 py-0.5 rounded-full font-bold">
+            <span className="bg-zinc-950/80 border border-zinc-800/80 text-zinc-300 text-[9px] px-2.5 py-0.5 rounded-full font-bold">
               {nicheSpec}
             </span>
           )}
-          {deliverySpec && (
-            <span className="bg-zinc-950/80 border border-zinc-800/80 text-zinc-300 text-[10px] px-2.5 py-0.5 rounded-full font-bold">
+          {deliverySpec && !usernameSpec && (
+            <span className="bg-zinc-950/80 border border-zinc-800/80 text-zinc-300 text-[9px] px-2.5 py-0.5 rounded-full font-bold">
               Delivery: {deliverySpec}
             </span>
           )}
