@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import SidebarCart from './components/SidebarCart';
@@ -23,12 +23,12 @@ export default function App() {
   const [activePage, setActivePage] = useState('home');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [detailListing, setDetailListing] = useState(null);
-  
+
   // Mobile drawer state managed at root level
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Onboarding tutorial removed
-  
+
   const { user, logout } = useAuthStore();
   const isAdmin = user && user.role === 'admin';
 
@@ -233,11 +233,10 @@ export default function App() {
                     <button
                       key={link.id}
                       onClick={() => handleMobileNavClick(link.id)}
-                      className={`w-full text-left py-2.5 px-3 rounded-lg text-xs font-semibold tracking-wide border transition-all flex items-center justify-between cursor-pointer ${
-                        activePage === link.id
+                      className={`w-full text-left py-2.5 px-3 rounded-lg text-xs font-semibold tracking-wide border transition-all flex items-center justify-between cursor-pointer ${activePage === link.id
                           ? 'bg-zinc-900 text-accent-green border-zinc-800 font-bold'
                           : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white border-transparent'
-                      }`}
+                        }`}
                     >
                       <span>{link.name}</span>
                       {link.id === 'contact' && unreadCount > 0 && (
@@ -252,11 +251,10 @@ export default function App() {
                   {user && (
                     <button
                       onClick={() => handleMobileNavClick('profile')}
-                      className={`w-full text-left py-2.5 px-3 rounded-lg text-xs font-semibold tracking-wide border transition-all cursor-pointer ${
-                        activePage === 'profile'
+                      className={`w-full text-left py-2.5 px-3 rounded-lg text-xs font-semibold tracking-wide border transition-all cursor-pointer ${activePage === 'profile'
                           ? 'bg-zinc-900 text-accent-green border-zinc-800 font-bold'
                           : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white border-transparent'
-                      }`}
+                        }`}
                     >
                       My Profile
                     </button>
@@ -266,11 +264,10 @@ export default function App() {
                   {isAdmin && (
                     <button
                       onClick={() => handleMobileNavClick('admin')}
-                      className={`w-full text-left py-2.5 px-3 rounded-lg text-xs font-bold tracking-wide border mt-2 transition-all cursor-pointer ${
-                        activePage === 'admin'
+                      className={`w-full text-left py-2.5 px-3 rounded-lg text-xs font-bold tracking-wide border mt-2 transition-all cursor-pointer ${activePage === 'admin'
                           ? 'bg-accent-green/10 text-accent-green border-accent-green/20'
                           : 'text-zinc-300 bg-zinc-900/40 hover:bg-zinc-900 hover:text-white border-border-dark'
-                      }`}
+                        }`}
                     >
                       Admin Dashboard
                     </button>
