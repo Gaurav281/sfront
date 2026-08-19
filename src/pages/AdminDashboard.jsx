@@ -36,6 +36,13 @@ export default function AdminDashboard() {
   const [monetized, setMonetized] = useState(false);
   const [status, setStatus] = useState('available');
 
+  // Bulk category discount state variables
+  const [bulkCategory, setBulkCategory] = useState('Instagram Accounts');
+  const [bulkDiscount, setBulkDiscount] = useState('0');
+  const [bulkSuccessMessage, setBulkSuccessMessage] = useState('');
+  const [bulkErrorMessage, setBulkErrorMessage] = useState('');
+  const [bulkLoading, setBulkLoading] = useState(false);
+
   const categories = [
     'Instagram Accounts',
     'YouTube Channels',
@@ -259,6 +266,34 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleBulkCategoryDiscountSubmit = async (e) => {
+    e.preventDefault();
+    setBulkSuccessMessage('');
+    setBulkErrorMessage('');
+    setBulkLoading(true);
+    
+    try {
+      const res = await apiClient.post('/listings/category-discount', {
+        category: bulkCategory,
+        discount: Number(bulkDiscount)
+      });
+      
+      setBulkSuccessMessage(res.data.message || 'Applied successfully!');
+      setBulkDiscount('0');
+      
+      // Invalidate queries to fetch new pricing
+      queryClient.invalidateQueries({ queryKey: ['adminListings'] });
+      queryClient.invalidateQueries({ queryKey: ['listings'] });
+      queryClient.invalidateQueries({ queryKey: ['recentListings'] });
+      
+      setTimeout(() => setBulkSuccessMessage(''), 3000);
+    } catch (err) {
+      setBulkErrorMessage(err.response?.data?.message || 'Failed to apply category discount.');
+    } finally {
+      setBulkLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 select-none space-y-6">
       
@@ -382,13 +417,16 @@ export default function AdminDashboard() {
         {activeTab === 'listings' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            {/* Form */}
-            <div className="lg:col-span-5 bg-card-dark border border-border-dark p-6 rounded-2xl space-y-4">
-              <h3 className="text-white font-extrabold text-sm border-b border-zinc-900 pb-2">
-                {editingListing ? 'Edit Listing Item' : 'Add New Listing Item'}
-              </h3>
+            {/* Forms Column */}
+            <div className="lg:col-span-5 space-y-6">
               
-              <form onSubmit={handleFormSubmit} className="space-y-3.5">
+              {/* Form 1: Add/Edit Listing */}
+              <div className="bg-card-dark border border-border-dark p-6 rounded-2xl space-y-4">
+                <h3 className="text-white font-extrabold text-sm border-b border-zinc-900 pb-2">
+                  {editingListing ? 'Edit Listing Item' : 'Add New Listing Item'}
+                </h3>
+                
+                <form onSubmit={handleFormSubmit} className="space-y-3.5">
                 <div className="space-y-1">
                   <label className="text-[9px] uppercase font-bold tracking-widest text-zinc-400">Listing Title</label>
                   <input
@@ -610,6 +648,61 @@ export default function AdminDashboard() {
                 </div>
               </form>
             </div>
+
+            {/* Form 2: Bulk Category Discount Setter */}
+            <div className="bg-card-dark border border-border-dark p-6 rounded-2xl space-y-4">
+              <h3 className="text-white font-extrabold text-sm border-b border-zinc-900 pb-2">
+                Category Bulk Discount Setter
+              </h3>
+              {bulkSuccessMessage && (
+                <p className="text-accent-green text-[10px] bg-accent-green/5 border border-accent-green/10 p-2 rounded-lg font-medium">
+                  {bulkSuccessMessage}
+                </p>
+              )}
+              {bulkErrorMessage && (
+                <p className="text-red-500 text-[10px] bg-red-950/20 border border-red-900/30 p-2 rounded-lg font-medium">
+                  {bulkErrorMessage}
+                </p>
+              )}
+              <form onSubmit={handleBulkCategoryDiscountSubmit} className="space-y-3.5">
+                <div className="space-y-1">
+                  <label className="text-[9px] uppercase font-bold tracking-widest text-zinc-400">Select Category</label>
+                  <select
+                    value={bulkCategory}
+                    onChange={(e) => setBulkCategory(e.target.value)}
+                    className="w-full bg-zinc-950 border border-border-dark text-white rounded-xl px-3 py-2.5 text-xs focus:outline-none"
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[9px] uppercase font-bold tracking-widest text-zinc-400">Discount Percentage (%)</label>
+                  <input
+                    type="number"
+                    required
+                    min="0"
+                    max="100"
+                    value={bulkDiscount}
+                    onChange={(e) => setBulkDiscount(e.target.value)}
+                    placeholder="e.g. 15"
+                    className="w-full bg-zinc-950 border border-border-dark text-white rounded-xl px-3 py-2.5 text-xs focus:outline-none"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={bulkLoading}
+                  className="w-full bg-accent-green hover:bg-accent-green-hover disabled:bg-zinc-800 text-black font-extrabold text-xs py-2.5 rounded-xl transition-all cursor-pointer"
+                >
+                  {bulkLoading ? 'Applying...' : 'Apply Category Discount'}
+                </button>
+              </form>
+            </div>
+
+          </div>
 
             {/* List */}
             <div className="lg:col-span-7 bg-card-dark border border-border-dark p-6 rounded-2xl space-y-4">

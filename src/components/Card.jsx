@@ -70,15 +70,27 @@ export default function Card({ listing, onViewDetails }) {
       whileHover={{ y: -6, borderColor: '#00DF82' }}
       transition={{ duration: 0.25 }}
       onClick={() => onViewDetails(listing)}
-      className="bg-card-dark border border-border-dark rounded-xl p-5 flex flex-col justify-between h-[360px] cursor-pointer group select-none transition-colors"
+      className="bg-card-dark border border-border-dark rounded-xl p-5 flex flex-col justify-between h-[360px] cursor-pointer group select-none transition-colors relative overflow-hidden"
     >
+      {/* Top Left Discount % Badge */}
+      {hasDiscount && (
+        <div className="absolute top-3 left-3 bg-accent-green text-black font-extrabold text-[9px] uppercase tracking-wider px-2.5 py-0.5 rounded shadow-lg z-10 animate-pulse">
+          {listing.discount}% OFF
+        </div>
+      )}
+
       <div>
         {/* Header row: Icon & Price */}
         <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 px-3 py-1 rounded-full text-xs font-semibold uppercase text-zinc-300">
-            {getPlatformIcon(listing.platform)}
-            <span>{listing.platform}</span>
-          </div>
+          {/* Spacer if discount badge is present, otherwise display platform */}
+          {hasDiscount ? (
+            <div className="w-16" /> // spacer to prevent overlap
+          ) : (
+            <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 px-3 py-1 rounded-full text-xs font-semibold uppercase text-zinc-300">
+              {getPlatformIcon(listing.platform)}
+              <span>{listing.platform}</span>
+            </div>
+          )}
           
           <div className="flex flex-col items-end">
             {hasDiscount && (
@@ -105,6 +117,14 @@ export default function Card({ listing, onViewDetails }) {
 
       {/* Specs / CTA section */}
       <div>
+        {/* Platform tag display when discount is active (to keep icons visible) */}
+        {hasDiscount && (
+          <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase text-zinc-500 mb-2">
+            {getPlatformIcon(listing.platform)}
+            <span>{listing.platform}</span>
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-1.5 mb-4">
           {followersSpec && (
             <span className="bg-zinc-900/60 border border-zinc-800 text-zinc-300 text-[10px] px-2 py-0.5 rounded-full font-medium">
@@ -119,11 +139,6 @@ export default function Card({ listing, onViewDetails }) {
           {deliverySpec && (
             <span className="bg-zinc-900/60 border border-zinc-800 text-zinc-300 text-[10px] px-2 py-0.5 rounded-full font-medium">
               Delivery: {deliverySpec}
-            </span>
-          )}
-          {hasDiscount && (
-            <span className="bg-accent-green/10 border border-accent-green/20 text-accent-green text-[10px] px-2 py-0.5 rounded-full font-bold">
-              {listing.discount}% OFF
             </span>
           )}
         </div>

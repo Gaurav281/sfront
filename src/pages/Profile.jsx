@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '../store/useAuthStore';
-import { User, Mail, Lock, ShieldCheck, ShoppingBag, Edit, Check } from 'lucide-react';
+import { User, Mail, Lock, ShoppingBag, Edit, Check, ShieldCheck, Calendar, Info } from 'lucide-react';
 import apiClient from '../api/apiClient';
 
 export default function Profile() {
   const { user, updateUserProfileState } = useAuthStore();
-  const queryClient = useQueryClient();
 
   // Profile forms states
   const [name, setName] = useState(user?.name || '');
@@ -20,7 +19,7 @@ export default function Profile() {
   const [passwordSuccess, setPasswordSuccess] = useState(false);
   const [passwordError, setPasswordError] = useState('');
 
-  // Fetch purchase history via TanStack Query
+  // Fetch purchase history
   const { data: myOrders, isLoading: ordersLoading } = useQuery({
     queryKey: ['myOrders', user?._id],
     queryFn: async () => {
@@ -92,21 +91,21 @@ export default function Profile() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 select-none space-y-8">
+    <div className="max-w-6xl mx-auto px-4 py-4 select-none space-y-6">
       
       {/* Title */}
-      <div className="border-b border-border-dark pb-6">
+      <div className="border-b border-border-dark pb-4">
         <h1 className="text-2xl font-black text-white">My Account</h1>
         <p className="text-zinc-500 text-xs mt-0.5">Manage personal settings and check purchase histories</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         {/* Forms column (Profile & Password settings) */}
         <div className="lg:col-span-5 space-y-6">
           
           {/* Profile settings */}
-          <div className="bg-card-dark border border-border-dark p-6 rounded-2xl space-y-4">
+          <div className="bg-card-dark border border-border-dark p-6 rounded-2xl space-y-4 shadow-lg">
             <h3 className="text-white font-extrabold text-sm border-b border-zinc-900 pb-2 flex items-center gap-1.5">
               <User className="w-4 h-4 text-accent-green" />
               <span>Personal Details</span>
@@ -176,7 +175,7 @@ export default function Profile() {
           </div>
 
           {/* Password Settings */}
-          <div className="bg-card-dark border border-border-dark p-6 rounded-2xl space-y-4">
+          <div className="bg-card-dark border border-border-dark p-6 rounded-2xl space-y-4 shadow-lg">
             <h3 className="text-white font-extrabold text-sm border-b border-zinc-900 pb-2 flex items-center gap-1.5">
               <Lock className="w-4 h-4 text-accent-green" />
               <span>Change Password</span>
@@ -232,8 +231,8 @@ export default function Profile() {
 
         </div>
 
-        {/* Purchase history column */}
-        <div className="lg:col-span-7 bg-card-dark border border-border-dark p-6 rounded-2xl space-y-4">
+        {/* Purchase history column - Card Format Layout */}
+        <div className="lg:col-span-7 bg-card-dark border border-border-dark p-6 rounded-2xl space-y-4 shadow-lg">
           <h3 className="text-white font-extrabold text-sm border-b border-zinc-900 pb-2 flex items-center gap-1.5">
             <ShoppingBag className="w-4 h-4 text-accent-green" />
             <span>My Purchase History</span>
@@ -242,45 +241,80 @@ export default function Profile() {
           {ordersLoading ? (
             <div className="text-center py-8 text-zinc-500 text-xs">Loading orders...</div>
           ) : myOrders && myOrders.length > 0 ? (
-            <div className="space-y-4 overflow-y-auto max-h-[500px] pr-2">
+            <div className="space-y-5 overflow-y-auto max-h-[640px] pr-2">
               {myOrders.map((order) => (
                 <div
                   key={order._id}
-                  className="bg-zinc-950 border border-zinc-900 p-4 rounded-xl space-y-3"
+                  className="bg-zinc-950 border border-zinc-900 p-5 rounded-2xl space-y-4 hover:border-zinc-800/80 transition-all hover:bg-zinc-900/10 shadow"
                 >
-                  <div className="flex justify-between items-center text-[10px] text-zinc-500 border-b border-zinc-900 pb-2 flex-wrap gap-2">
-                    <div>
-                      Order ID: <span className="text-white font-bold">#{order._id?.substring(18).toUpperCase()}</span>
+                  {/* Card Header: Order Status & ID */}
+                  <div className="flex justify-between items-center border-b border-zinc-900 pb-3 flex-wrap gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-accent-green animate-pulse"></span>
+                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent-green bg-accent-green/5 border border-accent-green/10 px-2.5 py-0.5 rounded-full">
+                        Secure Safe Pay Hold
+                      </span>
                     </div>
-                    <div>
-                      {new Date(order.createdAt).toLocaleString()}
+                    <div className="text-[10px] text-zinc-500 font-semibold">
+                      ID: <span className="text-white">#{order._id?.substring(18).toUpperCase()}</span>
                     </div>
                   </div>
 
-                  <div className="space-y-2">
+                  {/* Card Body: Purchased Assets List */}
+                  <div className="space-y-2.5">
+                    <p className="text-[9px] uppercase font-bold tracking-wider text-zinc-500">Purchased Assets</p>
                     {order.items?.map((item, index) => (
-                      <div key={index} className="flex justify-between items-center text-xs">
-                        <div>
-                          <span className="text-[8px] font-bold text-accent-green bg-accent-green/5 border border-accent-green/10 px-1.5 py-0.5 rounded mr-2">
+                      <div
+                        key={index}
+                        className="bg-zinc-900/30 border border-zinc-900/60 px-4 py-3 rounded-xl flex justify-between items-center text-xs"
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="text-[8px] font-black text-accent-green bg-accent-green/5 border border-accent-green/10 px-1.5 py-0.5 rounded shrink-0">
                             {item.platform}
                           </span>
-                          <span className="text-white font-semibold">{item.title}</span>
+                          <span className="text-white font-bold truncate">{item.title}</span>
                         </div>
-                        <span className="text-zinc-400 font-bold">${item.price}</span>
+                        <span className="text-zinc-300 font-extrabold shrink-0 ml-4">${item.price}</span>
                       </div>
                     ))}
                   </div>
 
-                  <div className="border-t border-zinc-900 pt-2 flex justify-between items-center text-xs">
-                    <div>
-                      <span className="text-zinc-500">Contact:</span>{' '}
-                      <span className="text-zinc-300 font-semibold">{order.billingDetails?.discordOrTelegram}</span>
+                  {/* Card Footer: Metadata Specs details */}
+                  <div className="bg-zinc-900/10 border border-zinc-900/30 p-3.5 rounded-xl space-y-2 text-[10px] text-zinc-400">
+                    <div className="flex justify-between items-center">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5 text-zinc-500" />
+                        <span>Date:</span>
+                      </span>
+                      <span className="text-zinc-300 font-semibold">
+                        {new Date(order.createdAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
+                      </span>
                     </div>
-                    <div>
-                      <span className="text-zinc-500 mr-2">Amount:</span>
-                      <span className="text-accent-green font-extrabold">${order.totalAmount}</span>
+
+                    <div className="flex justify-between items-center">
+                      <span className="flex items-center gap-1">
+                        <ShieldCheck className="w-3.5 h-3.5 text-zinc-500" />
+                        <span>Delivery Handle:</span>
+                      </span>
+                      <span className="text-white font-bold">{order.billingDetails?.discordOrTelegram}</span>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                      <span className="flex items-center gap-1">
+                        <Info className="w-3.5 h-3.5 text-zinc-500" />
+                        <span>Payment Method:</span>
+                      </span>
+                      <span className="text-zinc-300 truncate max-w-[200px]" title={order.billingDetails?.paymentMethod}>
+                        {order.billingDetails?.paymentMethod}
+                      </span>
+                    </div>
+
+                    <div className="border-t border-zinc-900 pt-2.5 mt-2.5 flex justify-between items-center text-xs">
+                      <span className="font-bold text-white uppercase tracking-wider">Total Paid</span>
+                      <span className="text-accent-green font-black text-sm">${order.totalAmount}</span>
                     </div>
                   </div>
+
                 </div>
               ))}
             </div>

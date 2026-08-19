@@ -131,7 +131,7 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-8 pb-20 md:pb-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 pt-2 pb-20 md:py-8 md:pb-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={activePage}
