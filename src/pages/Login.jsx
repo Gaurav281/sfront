@@ -1,35 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { Mail, Lock, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { Mail, Lock, Key, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 
 export default function Login({ onNavigate }) {
-  const { login, loading, error, clearError } = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  useEffect(() => {
-    clearError();
-  }, [clearError]);
+  const [showPassword, setShowPassword] = useState(false); // State to show/hide password
+  const { login, error, loading, clearError } = useAuthStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await login(email, password);
-    if (res.success) {
+    clearError();
+    const success = await login(email, password);
+    if (success) {
       onNavigate('home');
     }
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 py-16 select-none">
-      <div className="bg-card-dark border border-border-dark p-8 rounded-2xl space-y-6 shadow-xl">
+    <div className="max-w-md mx-auto px-4 py-12 select-none">
+      <div className="bg-card-dark border border-zinc-700/80 p-8 rounded-2xl space-y-6 shadow-2xl">
         
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex w-12 h-12 rounded-xl bg-accent-green/10 border border-accent-green/20 items-center justify-center text-accent-green mb-2">
-            <ShieldCheck className="w-6 h-6" />
+          <div className="w-12 h-12 rounded-xl bg-accent-green/5 border border-accent-green/10 flex items-center justify-center text-accent-green mx-auto">
+            <Key className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-black text-white">Login Account</h2>
-          <p className="text-zinc-500 text-xs">Enter credentials to trade digital assets</p>
+          <h2 className="text-xl font-black text-white uppercase tracking-wider">Access Account</h2>
+          <p className="text-zinc-500 text-xs">Enter your email credentials to login</p>
         </div>
 
         {/* Error message */}
@@ -51,7 +49,7 @@ export default function Login({ onNavigate }) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full bg-zinc-950 border border-border-dark text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-accent-green/50"
+                className="w-full bg-zinc-950 border border-zinc-800 text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-accent-green/50"
               />
             </div>
           </div>
@@ -63,13 +61,21 @@ export default function Login({ onNavigate }) {
             <div className="relative">
               <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-zinc-500" />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-zinc-950 border border-border-dark text-white rounded-xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:border-accent-green/50"
+                className="w-full bg-zinc-950 border border-zinc-800 text-white rounded-xl pl-10 pr-10 py-3 text-xs focus:outline-none focus:border-accent-green/50"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3.5 top-3.5 text-zinc-500 hover:text-white cursor-pointer"
+                title={showPassword ? 'Hide Password' : 'Show Password'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
           </div>
 
@@ -83,7 +89,7 @@ export default function Login({ onNavigate }) {
         </form>
 
         {/* Footer */}
-        <p className="text-zinc-500 text-[11px] text-center">
+        <p className="text-zinc-500 text-[11px] text-center font-semibold">
           Don't have an account?{' '}
           <button
             onClick={() => onNavigate('signup')}

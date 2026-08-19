@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import SidebarCart from './components/SidebarCart';
-import ListingDetailModal from './components/ListingDetailModal';
+import ItemDetail from './pages/ItemDetail';
 import Home from './pages/Home';
 import CategoryList from './pages/CategoryList';
 import AboutUs from './pages/AboutUs';
@@ -22,7 +22,7 @@ import apiClient from './api/apiClient';
 export default function App() {
   const [activePage, setActivePage] = useState('home');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedListing, setSelectedListing] = useState(null);
+  const [detailListing, setDetailListing] = useState(null);
   
   // Mobile drawer state managed at root level
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -69,7 +69,8 @@ export default function App() {
   };
 
   const handleViewDetails = (listing) => {
-    setSelectedListing(listing);
+    setDetailListing(listing);
+    handleNavigate('item-detail');
   };
 
   const handleMobileNavClick = (pageId) => {
@@ -111,6 +112,8 @@ export default function App() {
         return user ? <Profile /> : <Login onNavigate={handleNavigate} />;
       case 'admin':
         return isAdmin ? <AdminDashboard /> : <Home onNavigate={handleNavigate} onFilterCategory={handleFilterCategory} onViewDetails={handleViewDetails} />;
+      case 'item-detail':
+        return <ItemDetail listing={detailListing} onNavigate={handleNavigate} />;
       default:
         return (
           <Home
@@ -148,18 +151,10 @@ export default function App() {
       </main>
 
       {/* Global Footer */}
-      <Footer onNavigate={handleNavigate} />
+      {activePage !== 'contact' && <Footer onNavigate={handleNavigate} />}
 
       {/* Slide-out Sidebar Cart Drawer */}
       <SidebarCart onCheckoutNavigate={() => handleNavigate('checkout')} />
-
-      {/* Listing details view modal */}
-      {selectedListing && (
-        <ListingDetailModal
-          listing={selectedListing}
-          onClose={() => setSelectedListing(null)}
-        />
-      )}
 
       {/* Mobile Drawer Menu - Rendered at Root Level for Proper Stacking Context */}
       <AnimatePresence>

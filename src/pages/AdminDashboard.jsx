@@ -505,92 +505,140 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                {/* Specs */}
+                {/* Dynamic Specs details based on Category */}
                 <div className="bg-zinc-950/60 border border-zinc-900 p-4 rounded-xl space-y-3">
                   <h4 className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider border-b border-zinc-900 pb-1">
-                    Specs Details
+                    Specification Details
                   </h4>
-                  
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1">
-                      <label className="text-[8px] uppercase tracking-wider text-zinc-500 block">Followers/Subs</label>
-                      <input
-                        type="text"
-                        value={followers}
-                        onChange={(e) => setFollowers(e.target.value)}
-                        placeholder="e.g. 15K"
-                        className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-[8px] uppercase tracking-wider text-zinc-500 block">Niche</label>
-                      <input
-                        type="text"
-                        value={niche}
-                        onChange={(e) => setNiche(e.target.value)}
-                        placeholder="e.g. Gaming"
-                        className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
-                      />
-                    </div>
-                  </div>
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1">
-                      <label className="text-[8px] uppercase tracking-wider text-zinc-500 block">Delivery</label>
-                      <input
-                        type="text"
-                        value={deliveryTime}
-                        onChange={(e) => setDeliveryTime(e.target.value)}
-                        className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
-                      />
+                  {/* Social media categories (Instagram, YouTube, TikTok) */}
+                  {['Instagram Accounts', 'YouTube Channels', 'TikTok Accounts'].includes(category) && (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1">
+                          <label className="text-[8px] uppercase tracking-wider text-zinc-500 block font-bold">Followers / Subscribers</label>
+                          <input
+                            type="text"
+                            value={followers}
+                            onChange={(e) => setFollowers(e.target.value)}
+                            placeholder="e.g. 25K Subscribers"
+                            className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[8px] uppercase tracking-wider text-zinc-500 block font-bold">Niche / Topic</label>
+                          <input
+                            type="text"
+                            value={niche}
+                            onChange={(e) => setNiche(e.target.value)}
+                            placeholder="e.g. Gaming / Comedy"
+                            className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1">
+                          <label className="text-[8px] uppercase tracking-wider text-zinc-500 block font-bold">Validity</label>
+                          <input
+                            type="text"
+                            value={age}
+                            onChange={(e) => setAge(e.target.value)}
+                            placeholder="e.g. Lifetime Handovers"
+                            className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[8px] uppercase tracking-wider text-zinc-500 block font-bold">Delivery Speed</label>
+                          <input
+                            type="text"
+                            value={deliveryTime}
+                            onChange={(e) => setDeliveryTime(e.target.value)}
+                            placeholder="e.g. 24 Hours"
+                            className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 pt-1">
+                        <input
+                          type="checkbox"
+                          id="monetized"
+                          checked={monetized}
+                          onChange={(e) => setMonetized(e.target.checked)}
+                          className="accent-accent-green cursor-pointer"
+                        />
+                        <label htmlFor="monetized" className="text-[9px] uppercase tracking-wider text-zinc-400 cursor-pointer">
+                          Monetization Approved / Active Adsense
+                        </label>
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-[8px] uppercase tracking-wider text-zinc-500 block">DA / Authority</label>
-                      <input
-                        type="text"
-                        value={domainAuthority}
-                        onChange={(e) => setDomainAuthority(e.target.value)}
-                        placeholder="e.g. DA 50+"
-                        className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
-                      />
-                    </div>
-                  </div>
+                  )}
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1">
-                      <label className="text-[8px] uppercase tracking-wider text-zinc-500 block">Asset Age</label>
-                      <input
-                        type="text"
-                        value={age}
-                        onChange={(e) => setAge(e.target.value)}
-                        placeholder="e.g. 2 Years"
-                        className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
-                      />
+                  {/* Streaming Accounts */}
+                  {category === 'Streaming Accounts' && (
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[8px] uppercase tracking-wider text-zinc-500 block font-bold">Validity</label>
+                        <input
+                          type="text"
+                          value={age}
+                          onChange={(e) => setAge(e.target.value)}
+                          placeholder="e.g. 1 Year Private"
+                          className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[8px] uppercase tracking-wider text-zinc-500 block font-bold">Delivery speed</label>
+                        <input
+                          type="text"
+                          value={deliveryTime}
+                          onChange={(e) => setDeliveryTime(e.target.value)}
+                          placeholder="e.g. 1 Hour Delivery"
+                          className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
+                        />
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-[8px] uppercase tracking-wider text-zinc-500 block">Revisions</label>
-                      <input
-                        type="text"
-                        value={revisionCount}
-                        onChange={(e) => setRevisionCount(e.target.value)}
-                        placeholder="e.g. 3 Revisions"
-                        className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
-                      />
-                    </div>
-                  </div>
+                  )}
 
-                  <div className="flex items-center gap-2 pt-1">
-                    <input
-                      type="checkbox"
-                      id="monetized"
-                      checked={monetized}
-                      onChange={(e) => setMonetized(e.target.checked)}
-                      className="accent-accent-green"
-                    />
-                    <label htmlFor="monetized" className="text-[9px] uppercase tracking-wider text-zinc-400 cursor-pointer">
-                      Monetization Approved / Active Adsense
-                    </label>
-                  </div>
+                  {/* SEO and Graphics Design Services */}
+                  {['SEO Services', 'Graphics & Design'].includes(category) && (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1">
+                          <label className="text-[8px] uppercase tracking-wider text-zinc-500 block font-bold">Delivery Time</label>
+                          <input
+                            type="text"
+                            value={deliveryTime}
+                            onChange={(e) => setDeliveryTime(e.target.value)}
+                            placeholder="e.g. 5 Days"
+                            className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[8px] uppercase tracking-wider text-zinc-500 block font-bold">Revisions Count</label>
+                          <input
+                            type="text"
+                            value={revisionCount}
+                            onChange={(e) => setRevisionCount(e.target.value)}
+                            placeholder="e.g. 3 Revisions"
+                            className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                      {category === 'SEO Services' && (
+                        <div className="space-y-1">
+                          <label className="text-[8px] uppercase tracking-wider text-zinc-500 block font-bold">Domain Authority (DA)</label>
+                          <input
+                            type="text"
+                            value={domainAuthority}
+                            onChange={(e) => setDomainAuthority(e.target.value)}
+                            placeholder="e.g. DA 50+ Guaranteed"
+                            className="w-full bg-zinc-950 border border-zinc-900 text-white rounded-lg px-2.5 py-1.5 text-[10px] focus:outline-none"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                 </div>
 
                 <div className="space-y-1">

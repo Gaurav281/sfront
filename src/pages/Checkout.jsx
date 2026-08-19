@@ -461,9 +461,9 @@ export default function Checkout({ onNavigate }) {
             <div className="bg-zinc-950 border border-zinc-900/60 p-4 rounded-xl flex items-start gap-3">
               <ShieldCheck className="w-5 h-5 text-accent-green shrink-0 mt-0.5" />
               <div className="text-[10px] text-zinc-500 space-y-1.5 leading-normal">
-                <p className="font-bold text-white uppercase tracking-wider">UPI Safe Lock Guarantee</p>
+                <p className="font-bold text-white uppercase tracking-wider">Safe Pay Lock active</p>
                 <p>
-                  **Aapka paisa safe rahega.** Payment will only release to the seller once you confirm credentials delivery. Refund is instant if the seller fails to deliver within the window.
+                  Your money is safe. We release the payment only after you receive the credentials. Refund is instant if delivery fails.
                 </p>
               </div>
             </div>
