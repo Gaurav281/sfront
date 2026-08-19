@@ -95,11 +95,11 @@ export default function Card({ listing, onViewDetails }) {
           <div className="flex flex-col items-end">
             {hasDiscount && (
               <span className="text-[10px] text-zinc-500 line-through">
-                ${listing.price}
+                ₹{listing.price}
               </span>
             )}
             <span className="text-xl font-bold text-accent-green">
-              ${finalPrice}
+              ₹{finalPrice}
             </span>
           </div>
         </div>

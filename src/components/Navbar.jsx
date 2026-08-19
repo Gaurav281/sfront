@@ -27,7 +27,7 @@ export default function Navbar({ activePage, onNavigate, mobileMenuOpen, setMobi
   const unreadCount = unreadData?.unreadCount || 0;
 
   const navLinks = [
-    { name: 'Home', id: 'home' },
+    { name: 'Home', id: 'home', elementId: 'nav-home' },
     { name: 'Shop', id: 'shop', elementId: 'nav-shop' }, // added elementId for tutorial
     { name: 'About Us', id: 'about' },
     { name: 'Support Chat', id: 'contact', elementId: 'nav-chat' }, // added elementId
@@ -182,6 +182,7 @@ export default function Navbar({ activePage, onNavigate, mobileMenuOpen, setMobi
         
         {/* Home */}
         <button
+          id="mobile-nav-home"
           onClick={() => onNavigate('home')}
           className={`flex flex-col items-center justify-center gap-1.5 w-16 h-full transition-colors cursor-pointer ${
             activePage === 'home' ? 'text-accent-green' : 'text-zinc-500 hover:text-zinc-300'

@@ -351,7 +351,7 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest block">Total Sales</span>
-                    <span className="text-lg font-black text-white">${stats.totalSales}</span>
+                    <span className="text-lg font-black text-white">₹{stats.totalSales}</span>
                   </div>
                 </div>
 
@@ -745,11 +745,11 @@ export default function AdminDashboard() {
                         <div className="text-right">
                           {item.discount > 0 && (
                             <span className="text-[9px] text-zinc-500 line-through block">
-                              ${item.price}
+                              ₹{item.price}
                             </span>
                           )}
                           <span className="text-xs font-bold text-white">
-                            ${item.discount > 0 ? Math.round(item.price - (item.price * item.discount) / 100) : item.price}
+                            ₹{item.discount > 0 ? Math.round(item.price - (item.price * item.discount) / 100) : item.price}
                           </span>
                         </div>
                         <div className="flex gap-1.5">
@@ -819,12 +819,12 @@ export default function AdminDashboard() {
                         <td className="py-4 px-4 max-w-xs">
                           {order.items?.map((item, index) => (
                             <div key={index} className="text-[10px] truncate text-zinc-400">
-                              • {item.title} (${item.price})
+                              • {item.title} (₹{item.price})
                             </div>
                           ))}
                         </td>
                         <td className="py-4 px-4 text-right font-bold text-white whitespace-nowrap">
-                          ${order.totalAmount}
+                          ₹{order.totalAmount}
                         </td>
                       </tr>
                     ))}
@@ -908,12 +908,30 @@ export default function AdminDashboard() {
                         Email: {chatUsers?.find((u) => u._id === selectedChatUserId)?.email}
                       </span>
                     </div>
-                    <button
-                      onClick={() => setSelectedChatUserId(null)}
-                      className="text-[10px] text-zinc-500 hover:text-white"
-                    >
-                      Close Chat
-                    </button>
+                    <div className="flex gap-3 items-center">
+                      <button
+                        onClick={async () => {
+                          if (window.confirm('Delete all messages in this thread from both ends?')) {
+                            try {
+                              await apiClient.delete(`/chat/admin/clear/${selectedChatUserId}`);
+                              queryClient.invalidateQueries({ queryKey: ['adminSelectedMessages', selectedChatUserId] });
+                              queryClient.invalidateQueries({ queryKey: ['adminChatUsers'] });
+                            } catch (err) {
+                              alert('Failed to delete chat thread');
+                            }
+                          }
+                        }}
+                        className="text-[10px] text-red-500 hover:text-red-400 font-bold"
+                      >
+                        Delete Thread
+                      </button>
+                      <button
+                        onClick={() => setSelectedChatUserId(null)}
+                        className="text-[10px] text-zinc-500 hover:text-white font-bold"
+                      >
+                        Close Chat
+                      </button>
+                    </div>
                   </div>
 
                   {/* Messages frame */}

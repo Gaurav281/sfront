@@ -5,52 +5,63 @@ import { ArrowRight, HelpCircle, X } from 'lucide-react';
 export default function Tutorial({ activePage, onNavigate, user, onComplete }) {
   const [step, setStep] = useState(0);
   const [coords, setCoords] = useState(null);
+  const [initialDelay, setInitialDelay] = useState(true);
 
   const steps = [
     {
-      targetId: { desktop: 'nav-shop', mobile: 'mobile-nav-shop' },
-      text: "Shop: Buy Instagram accounts, YouTube Premium, and digital services at cheap rates.",
+      targetId: { desktop: 'nav-home', mobile: 'mobile-nav-home' },
+      text: "Home: Visit our main page to view featured deals.",
       page: 'home',
+      requiresLogin: false,
+    },
+    {
+      targetId: { desktop: 'hero-section', mobile: 'hero-section' },
+      text: "Deals: Buy verified Instagram pages and YT Premium at cheap prices.",
+      page: 'home',
+      requiresLogin: false,
+    },
+    {
+      targetId: { desktop: 'nav-shop', mobile: 'mobile-nav-shop' },
+      text: "Shop: Browse our full catalog of Instagram pages and premium plans.",
+      page: 'home',
+      requiresLogin: false,
     },
     {
       targetId: { desktop: 'shop-categories', mobile: 'shop-categories' },
-      text: "Filters: Quickly filter the shop by platform or category to find what you want.",
+      text: "Filters: Quickly filter the shop by category to find what you want.",
       page: 'shop',
+      requiresLogin: false,
     },
     {
       targetId: { desktop: 'nav-chat', mobile: 'mobile-nav-chat' },
-      text: "Support Chat: Message our team to coordinate credentials handover or ask questions.",
-      page: 'shop', // start navigation from shop
+      text: "Support Chat: Message our team to coordinate secure handovers.",
+      page: 'shop',
+      requiresLogin: false,
     },
     {
       targetId: { desktop: 'chat-box', mobile: 'chat-box' },
-      text: "Live Support Box: Real-time messaging with operators to securely transfer ownership.",
+      text: "Live Support Box: Real-time messaging with operators to transfer details safely.",
       page: 'contact',
-      requiresLogin: true,
-    },
-    {
-      targetId: { desktop: 'nav-profile', mobile: 'mobile-nav-profile' },
-      text: "Profile: Manage settings, update contact handles, and view your purchase history.",
-      page: 'contact',
-    },
-    {
-      targetId: { desktop: 'profile-purchases', mobile: 'profile-purchases' },
-      text: "Order Cards: Review secure order status, transacted dates, and paid UPI details.",
-      page: 'profile',
       requiresLogin: true,
     }
   ];
 
+  // 0.5-second initial delay on load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setInitialDelay(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   const currentStepData = steps[step];
 
-  // Helper to determine if mobile layout is active
   const isMobile = () => window.innerWidth < 768;
 
-  // Auto-navigation when changing steps
+  // Auto-navigate to correct page when step changes
   useEffect(() => {
-    if (!currentStepData) return;
+    if (initialDelay || !currentStepData) return;
     
-    // Skip step if login is required but user is not logged in
     if (currentStepData.requiresLogin && !user) {
       handleNext();
       return;
@@ -59,13 +70,14 @@ export default function Tutorial({ activePage, onNavigate, user, onComplete }) {
     if (activePage !== currentStepData.page) {
       onNavigate(currentStepData.page);
     }
-  }, [step, user]);
+  }, [step, user, initialDelay]);
 
-  // Recalculate target positions
+  // Track coordinates of target element
   useEffect(() => {
     const updatePosition = () => {
-      if (!currentStepData) return;
+      if (initialDelay || !currentStepData) return;
       
+      // Check if target is a generic string (e.g. desktop/mobile key selector)
       const targetKey = isMobile() ? currentStepData.targetId.mobile : currentStepData.targetId.desktop;
       const el = document.getElementById(targetKey);
       
@@ -76,14 +88,14 @@ export default function Tutorial({ activePage, onNavigate, user, onComplete }) {
           left: rect.left + window.scrollX,
           width: rect.width,
           height: rect.height,
+          bottom: rect.bottom,
         });
       } else {
         setCoords(null);
       }
     };
 
-    // Delay slightly to let the page render content
-    const delay = setTimeout(updatePosition, 350);
+    const delay = setTimeout(updatePosition, 400);
     
     window.addEventListener('resize', updatePosition);
     window.addEventListener('scroll', updatePosition);
@@ -93,16 +105,7 @@ export default function Tutorial({ activePage, onNavigate, user, onComplete }) {
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition);
     };
-  }, [step, activePage]);
-
-  // 4-second auto-advance timer per step
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      handleNext();
-    }, 4500);
-
-    return () => clearTimeout(timer);
-  }, [step]);
+  }, [step, activePage, initialDelay]);
 
   const handleNext = () => {
     if (step < steps.length - 1) {
@@ -117,51 +120,98 @@ export default function Tutorial({ activePage, onNavigate, user, onComplete }) {
     onComplete();
   };
 
-  if (!currentStepData) return null;
+  if (initialDelay || !currentStepData) return null;
+
+  // Calculate layout-aware prompt position (above or below targeted element)
+  const getPromptPositionStyle = () => {
+    if (!coords) {
+      // Fallback: center of viewport
+      return {
+        top: '30%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+      };
+    }
+
+    const viewportHeight = window.innerHeight;
+    const isTargetNearTop = coords.top < viewportHeight / 2;
+
+    if (isTargetNearTop) {
+      // Place prompt card below highlighted element
+      return {
+        top: `${coords.top + coords.height + 16}px`,
+        left: '50%',
+        transform: 'translateX(-50%)',
+      };
+    } else {
+      // Place prompt card above highlighted element
+      return {
+        bottom: `${viewportHeight - coords.top + 16}px`,
+        left: '50%',
+        transform: 'translateX(-50%)',
+      };
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 pointer-events-none select-none">
       {/* Dark overlay backdrop */}
       <div 
-        className="absolute inset-0 bg-black/65 pointer-events-auto"
-        onClick={handleNext} // Clicking backdrop advances the step
+        className="absolute inset-0 bg-black/70 pointer-events-auto cursor-pointer"
+        onClick={handleNext}
       />
 
-      {/* Spotlight Ring Wrapper */}
+      {/* Target spotlight highlighting rings */}
       {coords && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="absolute border-2 border-accent-green rounded-xl shadow-[0_0_20px_rgba(0,223,130,0.5)] z-50"
-          style={{
-            top: coords.top - 6,
-            left: coords.left - 6,
-            width: coords.width + 12,
-            height: coords.height + 12,
-          }}
-        />
+        <>
+          {/* Animated shrinking target ring focusing on the button */}
+          <motion.div
+            key={`shrinking-ring-${step}`}
+            initial={{ scale: 2.2, opacity: 0 }}
+            animate={{ scale: 1, opacity: 0.8 }}
+            transition={{ type: 'spring', damping: 20, stiffness: 100, duration: 0.6 }}
+            className="absolute border-[3px] border-accent-green rounded-xl z-50"
+            style={{
+              top: coords.top - 6,
+              left: coords.left - 6,
+              width: coords.width + 12,
+              height: coords.height + 12,
+            }}
+          />
+
+          {/* Core spotlight ring */}
+          <div
+            className="absolute border border-accent-green rounded-xl shadow-[0_0_15px_rgba(0,223,130,0.6)] z-50"
+            style={{
+              top: coords.top - 6,
+              left: coords.left - 6,
+              width: coords.width + 12,
+              height: coords.height + 12,
+            }}
+          />
+        </>
       )}
 
-      {/* Central prompts instructions card */}
-      <div className="absolute inset-x-4 top-1/3 md:top-1/4 flex justify-center z-50">
+      {/* Layout-aware central prompts instructions card */}
+      <div className="absolute z-50 transition-all duration-300" style={getPromptPositionStyle()}>
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -15 }}
-          className="w-full max-w-sm bg-zinc-950 border border-zinc-800 p-6 rounded-2xl shadow-2xl space-y-4 pointer-events-auto"
+          exit={{ opacity: 0, y: -10 }}
+          className="w-[90vw] max-w-[340px] bg-zinc-950 border border-zinc-800 p-5 rounded-2xl shadow-2xl space-y-4 pointer-events-auto"
         >
           {/* Header */}
-          <div className="flex justify-between items-center border-b border-zinc-900 pb-2.5">
+          <div className="flex justify-between items-center border-b border-zinc-900 pb-2 flex-wrap gap-2">
             <div className="flex items-center gap-1.5 text-accent-green">
-              <HelpCircle className="w-4 h-4" />
-              <span className="text-[10px] font-black uppercase tracking-wider">Quick Platform Tour</span>
+              <HelpCircle className="w-3.5 h-3.5" />
+              <span className="text-[9px] font-black uppercase tracking-wider">Onboarding Guide</span>
             </div>
             <button
               onClick={handleClose}
               className="text-zinc-500 hover:text-white p-0.5 rounded transition-colors"
-              title="Skip Tour"
+              title="Skip Guide"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" />
             </button>
           </div>
 
@@ -171,20 +221,19 @@ export default function Tutorial({ activePage, onNavigate, user, onComplete }) {
           </p>
 
           {/* Prompt card action buttons */}
-          <div className="flex justify-between items-center pt-2 text-[10px]">
+          <div className="flex justify-between items-center pt-1 text-[10px]">
             <button
               onClick={handleClose}
               className="text-zinc-500 hover:text-red-400 font-bold transition-colors cursor-pointer"
             >
-              Skip Tour
+              Skip
             </button>
             
             <button
               onClick={handleNext}
-              className="flex items-center gap-1 bg-accent-green hover:bg-accent-green-hover text-black font-extrabold px-3.5 py-1.5 rounded-lg transition-all cursor-pointer"
+              className="bg-accent-green hover:bg-accent-green-hover text-black font-extrabold px-3 py-1.5 rounded-lg transition-all cursor-pointer"
             >
               <span>{step === steps.length - 1 ? 'Finish' : 'Next'}</span>
-              <ArrowRight className="w-3 h-3 stroke-[3px]" />
             </button>
           </div>
         </motion.div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../store/useAuthStore';
-import { Send, ShieldCheck, User, MessageSquare } from 'lucide-react';
+import { Send, ShieldCheck, User, MessageSquare, Trash } from 'lucide-react';
 import apiClient from '../api/apiClient';
 
 export default function ContactUs() {
@@ -9,6 +9,7 @@ export default function ContactUs() {
   const queryClient = useQueryClient();
   const [text, setText] = useState('');
   const messagesEndRef = useRef(null);
+  const prevCountRef = useRef(0);
 
   // Tanstack Query to pull chat history
   const { data: messages, isLoading } = useQuery({
@@ -18,17 +19,21 @@ export default function ContactUs() {
       return res.data;
     },
     enabled: !!user,
-    refetchInterval: 4000, // Poll every 4 seconds for live-like replies
+    refetchInterval: 4000, // Poll every 4 seconds for live replies
   });
 
-  // Scroll to bottom helper
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
+  // Scroll to bottom WhatsApp style
   useEffect(() => {
     if (messages) {
-      scrollToBottom();
+      const prevCount = prevCountRef.current;
+      prevCountRef.current = messages.length;
+      if (prevCount === 0) {
+        // Instant scroll on first load
+        messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+      } else {
+        // Smooth scroll when new messages are added
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   }, [messages]);
 
@@ -43,13 +48,28 @@ export default function ContactUs() {
     },
   });
 
+  // Clear chat history mutation (deletes from both ends)
+  const clearChatMutation = useMutation({
+    mutationFn: async () => {
+      return await apiClient.delete('/chat/clear');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chatMessages'] });
+    },
+  });
+
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (!text.trim()) return;
     sendMessageMutation.mutate(text);
   };
 
-  // If user is logged out, show login prompt
+  const handleClearChat = () => {
+    if (window.confirm('Delete all messages in this thread from both ends? This cannot be undone.')) {
+      clearChatMutation.mutate();
+    }
+  };
+
   if (!user) {
     return (
       <div className="max-w-md mx-auto px-4 py-16 text-center select-none space-y-4">
@@ -69,20 +89,20 @@ export default function ContactUs() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 select-none space-y-6">
       
-      {/* Page Header - localized wording */}
+      {/* Page Header */}
       <div className="border-b border-border-dark pb-6 flex justify-between items-end flex-wrap gap-4">
         <div>
           <h1 className="text-2xl font-black text-white flex items-center gap-2">
             <span>Support Chat</span>
             <span className="w-2 h-2 rounded-full bg-accent-green animate-ping"></span>
           </h1>
-          <p className="text-zinc-500 text-xs mt-0.5">
-            Aapka queries yahan live answer kiya jayega. Chat here with our support operator.
+          <p className="text-zinc-500 text-xs mt-0.5 font-medium">
+            Live support operator is active. Chat with us here regarding delivery handles or UPI payments.
           </p>
         </div>
         <div className="flex items-center gap-1.5 text-[10px] text-accent-green bg-accent-green/5 border border-accent-green/10 px-3.5 py-1.5 rounded-xl">
           <ShieldCheck className="w-3.5 h-3.5" />
-          <span className="font-extrabold tracking-wider">SAFE PAY LOCK PROTECTED</span>
+          <span className="font-extrabold tracking-wider">SAFE PAY HOLD SECURITY ACTIVE</span>
         </div>
       </div>
 
@@ -90,21 +110,31 @@ export default function ContactUs() {
       <div id="chat-box" className="bg-card-dark border border-border-dark rounded-2xl h-[550px] flex flex-col justify-between overflow-hidden shadow-xl">
         
         {/* Chat Header banner */}
-        <div className="bg-zinc-950/60 px-6 py-4 border-b border-zinc-900 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-accent-green/10 border border-accent-green/20 flex items-center justify-center font-bold text-accent-green text-xs">
-            OP
+        <div className="bg-zinc-950/60 px-6 py-4 border-b border-zinc-900 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-accent-green/10 border border-accent-green/20 flex items-center justify-center font-bold text-accent-green text-xs animate-pulse">
+              OP
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-white">Support Desk Operators</h4>
+              <span className="text-[9px] text-zinc-500 block font-medium">Typically replies in a few minutes</span>
+            </div>
           </div>
-          <div>
-            <h4 className="text-xs font-bold text-white">Digital Service Pro Support Desk</h4>
-            <span className="text-[9px] text-zinc-500 block">Typically replies in a few minutes</span>
-          </div>
+          
+          <button
+            onClick={handleClearChat}
+            disabled={clearChatMutation.isPending}
+            className="text-[10px] text-red-500 hover:text-red-400 font-extrabold cursor-pointer transition-colors disabled:text-zinc-600"
+          >
+            Clear Chat
+          </button>
         </div>
 
         {/* Scrollable messages area */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-zinc-950/20">
+        <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-zinc-950/20 scrollbar-thin scrollbar-thumb-zinc-800">
           {isLoading ? (
             <div className="h-full flex items-center justify-center text-zinc-500 text-xs">
-              Loading previous conversations...
+              Loading chat conversations...
             </div>
           ) : messages && messages.length > 0 ? (
             <>
@@ -122,8 +152,8 @@ export default function ContactUs() {
                           : 'bg-zinc-900 border border-zinc-800 text-white rounded-tl-none'
                       }`}
                     >
-                      <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
-                      <span className="text-[8px] text-zinc-500 block mt-1.5 text-right">
+                      <p className="leading-relaxed whitespace-pre-wrap font-medium">{msg.text}</p>
+                      <span className="text-[8px] text-zinc-500 block mt-1.5 text-right font-medium">
                         {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
@@ -138,9 +168,9 @@ export default function ContactUs() {
                 <MessageSquare className="w-6 h-6" />
               </div>
               <div>
-                <p className="font-semibold text-white text-xs">No messages yet</p>
+                <p className="font-bold text-white text-xs">No Messages Yet</p>
                 <p className="text-zinc-500 text-[10px] mt-1 max-w-xs leading-normal">
-                  Kuch poochna hai? Ask us anything regarding order delivery, Safe Pay protection, or custom digital packages here.
+                  Ask us anything regarding order delivery, Safe Pay protection, or streaming upgrade keys here.
                 </p>
               </div>
             </div>
@@ -154,7 +184,7 @@ export default function ContactUs() {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Type your message here..."
-            className="flex-1 bg-zinc-950 border border-border-dark text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-accent-green/50"
+            className="flex-1 bg-zinc-950 border border-border-dark text-white rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-accent-green/50 font-medium"
           />
           <button
             type="submit"

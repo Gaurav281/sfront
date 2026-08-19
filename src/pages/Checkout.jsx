@@ -134,7 +134,7 @@ export default function Checkout({ onNavigate }) {
             </div>
             <div className="flex justify-between items-center text-zinc-500 border-t border-zinc-900 pt-2 mt-2">
               <span className="font-bold text-white">Amount Paid</span>
-              <span className="text-accent-green font-extrabold text-sm">${orderSuccess.totalAmount}</span>
+              <span className="text-accent-green font-extrabold text-sm">₹{orderSuccess.totalAmount}</span>
             </div>
           </div>
 
@@ -190,7 +190,7 @@ export default function Checkout({ onNavigate }) {
               </div>
               <div className="text-right">
                 <p className="text-[10px] text-zinc-500 uppercase tracking-widest">Total Bill</p>
-                <h3 className="text-xl font-black text-accent-green">${getTotalPrice()}</h3>
+                <h3 className="text-xl font-black text-accent-green">₹{getTotalPrice()}</h3>
               </div>
             </div>
 
@@ -380,7 +380,7 @@ export default function Checkout({ onNavigate }) {
                             Scan the QR code using any UPI app (Google Pay, Paytm, PhonePe, Bhim, or banking apps).
                           </p>
                           <p className="text-zinc-400 text-[11px] font-bold text-white">
-                            Amount: ${getTotalPrice()}
+                            Amount: ₹{getTotalPrice()}
                           </p>
                         </div>
                       </div>
@@ -445,7 +445,7 @@ export default function Checkout({ onNavigate }) {
                     <p className="font-semibold text-white mt-1.5 max-w-[200px] truncate">{item.title}</p>
                     <p className="text-[10px] text-zinc-500">{item.category}</p>
                   </div>
-                  <span className="text-zinc-300 font-bold">${item.price}</span>
+                  <span className="text-zinc-300 font-bold">₹{item.price}</span>
                 </div>
               ))}
             </div>
@@ -453,7 +453,7 @@ export default function Checkout({ onNavigate }) {
             <div className="border-t border-border-dark pt-4 space-y-2">
               <div className="flex justify-between items-center text-xs">
                 <span className="text-zinc-400 font-semibold">Total Price</span>
-                <span className="text-md font-extrabold text-white">${getTotalPrice()}</span>
+                <span className="text-md font-extrabold text-white">₹{getTotalPrice()}</span>
               </div>
             </div>
 

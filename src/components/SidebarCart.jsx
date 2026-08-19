@@ -83,7 +83,7 @@ export default function SidebarCart({ onCheckoutNavigate }) {
                       
                       {/* Price and delete button */}
                       <div className="flex flex-col items-end gap-2 shrink-0">
-                        <span className="text-sm font-bold text-white">${item.price}</span>
+                        <span className="text-sm font-bold text-white">₹{item.price}</span>
                         <button
                           onClick={() => removeFromCart(item._id)}
                           className="p-1.5 rounded-md hover:bg-zinc-800 text-zinc-500 hover:text-red-500 transition-colors"
@@ -103,7 +103,7 @@ export default function SidebarCart({ onCheckoutNavigate }) {
             <div className="p-6 border-t border-border-dark bg-zinc-950/80 space-y-4">
               <div className="flex justify-between items-center text-sm">
                 <span className="text-zinc-400">Subtotal</span>
-                <span className="text-lg font-bold text-white">${getTotalPrice()}</span>
+                <span className="text-lg font-bold text-white">₹{getTotalPrice()}</span>
               </div>
               <p className="text-[10px] text-zinc-500 leading-normal">
                 Tax and delivery fees are calculated at checkout. Safe Payment Lock is fully active on all orders.

@@ -92,10 +92,10 @@ export default function ListingDetailModal({ listing, onClose }) {
                 <div className="flex items-baseline gap-2">
                   {hasDiscount && (
                     <span className="text-sm text-zinc-500 line-through">
-                      ${listing.price}
+                      ₹{listing.price}
                     </span>
                   )}
-                  <div className="text-2xl md:text-3xl font-black text-white">${finalPrice}</div>
+                  <div className="text-2xl md:text-3xl font-black text-white">₹{finalPrice}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-xs text-accent-green bg-accent-green/10 px-3 py-2 rounded-lg border border-accent-green/20">
