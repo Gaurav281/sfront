@@ -96,7 +96,7 @@ export default function App() {
       <Navbar activePage={activePage} onNavigate={handleNavigate} />
 
       {/* Main Content Area with Page Change Animations */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-8 pb-20 md:pb-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={activePage}

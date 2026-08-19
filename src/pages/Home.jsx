@@ -89,7 +89,7 @@ export default function Home({ onNavigate, onFilterCategory, onViewDetails }) {
               onClick={() => onNavigate('shop')}
               className="bg-accent-green hover:bg-accent-green-hover text-black font-extrabold text-xs py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>Explore Marketplace</span>
+              <span>Open Shop</span>
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
