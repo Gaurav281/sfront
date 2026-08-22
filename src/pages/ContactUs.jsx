@@ -6,12 +6,12 @@ import apiClient from '../api/apiClient';
 import { useAlertStore } from '../store/useAlertStore';
 
 const AGENT_NAMES = [
-  'Rahul Sharma (Support Operator)',
-  'Priya Iyer (Technical Support)',
-  'Amit Patel (Safe Pay Coordinator)',
-  'Sneha Reddy (Handovers Expert)',
-  'Vikram Malhotra (Account Specialist)',
-  'Deepa Nair (Billing Assistance)'
+  'Rahul (Support Help)',
+  'Priya (Tech Assistant)',
+  'Amit (Safe Pay Desk)',
+  'Sneha (Handovers Specialist)',
+  'Vikram (Accounts Desk)',
+  'Deepa (Billing Help)'
 ];
 
 const AGENT_AVATARS = [
@@ -143,7 +143,10 @@ export default function ContactUs({ onNavigate }) {
   }
 
   return (
-    <div className="fixed inset-0 z-55 bg-zinc-950 flex flex-col justify-between overflow-hidden w-screen h-screen">
+    <div 
+      className="fixed inset-0 z-55 bg-zinc-950 flex flex-col justify-between overflow-hidden w-full h-[100dvh]"
+      style={{ height: '100dvh', maxHeight: '100dvh' }}
+    >
       
       {/* WhatsApp Native Style Header */}
       <div className="bg-zinc-900/90 border-b border-zinc-800 px-4 py-3 flex items-center justify-between shrink-0">

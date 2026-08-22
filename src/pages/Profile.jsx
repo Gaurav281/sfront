@@ -350,88 +350,101 @@ export default function Profile() {
                 <div className="text-center py-12 text-zinc-500 text-xs">Loading transaction records...</div>
               ) : myOrders && myOrders.length > 0 ? (
                 <div className="space-y-5 overflow-y-auto max-h-[550px] pr-2">
-                  {myOrders.map((order) => (
-                    <div
-                      key={order._id}
-                      className="bg-zinc-950 border border-zinc-900 p-5 rounded-2xl space-y-4 hover:border-zinc-800/80 transition-all shadow"
-                    >
-                      {/* Card Header: Order Status */}
-                      <div className="flex justify-between items-center border-b border-zinc-900 pb-3 flex-wrap gap-2">
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-accent-green animate-pulse"></span>
-                          <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent-green bg-accent-green/5 border border-accent-green/10 px-2.5 py-0.5 rounded-full">
-                            Secure Safe Pay Hold
-                          </span>
-                        </div>
-                        <div className="text-[10px] text-zinc-500 font-semibold">
-                          ID: <span className="text-white">#{order._id?.substring(18).toUpperCase()}</span>
-                        </div>
-                      </div>
+                  {myOrders.map((order) => {
+                    const firstItemPlatform = order.items?.[0]?.platform || 'Streaming';
+                    let platformBorder = 'border-l-4 border-l-accent-green hover:border-accent-green/30';
+                    if (firstItemPlatform.toLowerCase().includes('instagram')) {
+                      platformBorder = 'border-l-4 border-l-pink-500 hover:border-pink-500/30';
+                    } else if (firstItemPlatform.toLowerCase().includes('youtube')) {
+                      platformBorder = 'border-l-4 border-l-red-500 hover:border-red-500/30';
+                    } else if (firstItemPlatform.toLowerCase().includes('tiktok')) {
+                      platformBorder = 'border-l-4 border-l-cyan-400 hover:border-cyan-400/30';
+                    }
 
-                      {/* Card Body: Purchased Assets List */}
-                      <div className="space-y-2.5">
-                        <p className="text-[9px] uppercase font-bold tracking-wider text-zinc-500">Purchased Assets</p>
-                        {order.items?.map((item, index) => (
-                          <div
-                            key={index}
-                            className="bg-zinc-900/30 border border-zinc-900/60 px-4 py-3 rounded-xl flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 text-xs"
-                          >
-                            <div className="flex items-start gap-2 min-w-0 flex-wrap sm:flex-nowrap">
-                              <span className="text-[8px] font-black text-accent-green bg-accent-green/5 border border-accent-green/10 px-1.5 py-0.5 rounded shrink-0 mt-0.5">
-                                {item.platform}
-                              </span>
-                              <span className="text-white font-bold break-words whitespace-normal leading-normal">{item.title}</span>
+                    return (
+                      <div
+                        key={order._id}
+                        className={`bg-[#0c0c0d] border border-zinc-850 p-6 rounded-2xl space-y-4 hover:bg-zinc-900/10 transition-all shadow-xl relative overflow-hidden ${platformBorder}`}
+                      >
+                        {/* Receipt Header details */}
+                        <div className="flex justify-between items-center border-b border-zinc-900 pb-3.5 flex-wrap gap-2">
+                          <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-accent-green animate-ping"></span>
+                            <span className="text-[9px] font-black uppercase tracking-widest text-accent-green bg-accent-green/5 border border-accent-green/10 px-3 py-1 rounded-lg">
+                              Safe Pay Handover Active
+                            </span>
+                          </div>
+                          <div className="text-[10px] text-zinc-500 font-bold">
+                            Receipt ID: <span className="bg-zinc-950 text-zinc-300 font-mono px-2 py-0.5 rounded border border-zinc-900">#{order._id?.substring(16).toUpperCase()}</span>
+                          </div>
+                        </div>
+
+                        {/* List of items transacted */}
+                        <div className="space-y-3">
+                          <p className="text-[8px] uppercase font-black tracking-widest text-zinc-500">Receipt Line Items</p>
+                          {order.items?.map((item, index) => (
+                            <div
+                              key={index}
+                              className="bg-zinc-950 border border-zinc-900 px-4 py-3 rounded-xl flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 text-xs"
+                            >
+                              <div className="flex items-start gap-2.5 min-w-0 flex-wrap sm:flex-nowrap">
+                                <span className="text-[8px] font-black text-white bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded shrink-0 uppercase tracking-widest mt-0.5">
+                                  {item.platform}
+                                </span>
+                                <span className="text-zinc-200 font-bold break-words whitespace-normal leading-normal">{item.title}</span>
+                              </div>
+                              
+                              <div className="flex items-center justify-between sm:justify-end gap-3 flex-wrap shrink-0 mt-1 sm:mt-0">
+                                <span className="text-[9px] text-zinc-400 font-extrabold border border-zinc-800 bg-zinc-900 px-2.5 py-0.5 rounded">
+                                  {getItemValidity(item)}
+                                </span>
+                                <span className="text-white font-black shrink-0">₹{item.price}</span>
+                              </div>
                             </div>
-                            
-                            {/* Validity Indicator */}
-                            <div className="flex items-center justify-between sm:justify-end gap-3 flex-wrap shrink-0 mt-1 sm:mt-0">
-                              <span className="text-[10px] text-zinc-400 font-semibold border border-zinc-800/60 bg-zinc-950 px-2 py-0.5 rounded whitespace-nowrap">
-                                Validity: {getItemValidity(item)}
+                          ))}
+                        </div>
+
+                        {/* Invoice receipt metadata columns */}
+                        <div className="bg-zinc-950 border border-zinc-900 p-4 rounded-xl space-y-2.5 text-[10px] text-zinc-400">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-2.5 border-b border-zinc-900">
+                            <div className="flex justify-between items-center pr-0 sm:pr-4 sm:border-r border-zinc-900">
+                              <span className="flex items-center gap-1.5 font-bold text-zinc-500">
+                                <Calendar className="w-3.5 h-3.5 text-zinc-650" />
+                                <span>Transaction Date:</span>
                               </span>
-                              <span className="text-zinc-300 font-extrabold shrink-0">₹{item.price}</span>
+                              <span className="text-zinc-300 font-extrabold">
+                                {new Date(order.createdAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
+                              </span>
+                            </div>
+
+                            <div className="flex justify-between items-center pl-0 sm:pl-4">
+                              <span className="flex items-center gap-1.5 font-bold text-zinc-500">
+                                <ShieldCheck className="w-3.5 h-3.5 text-zinc-650" />
+                                <span>Handover Handle:</span>
+                              </span>
+                              <span className="text-white font-black">{order.billingDetails?.discordOrTelegram}</span>
                             </div>
                           </div>
-                        ))}
+
+                          <div className="flex justify-between items-center text-[10px]">
+                            <span className="flex items-center gap-1.5 font-bold text-zinc-500">
+                              <Info className="w-3.5 h-3.5 text-zinc-650" />
+                              <span>Payment Gateway Method:</span>
+                            </span>
+                            <span className="text-zinc-300 font-bold truncate max-w-[250px]" title={order.billingDetails?.paymentMethod}>
+                              {order.billingDetails?.paymentMethod}
+                            </span>
+                          </div>
+
+                          <div className="border-t border-zinc-900 pt-3 mt-1 flex justify-between items-center text-xs">
+                            <span className="font-black text-white uppercase tracking-widest text-[10px]">Net Invoice Total</span>
+                            <span className="text-accent-green font-black text-sm">₹{order.totalAmount}</span>
+                          </div>
+                        </div>
+
                       </div>
-
-                      {/* Card Footer: Metadata Details */}
-                      <div className="bg-zinc-900/10 border border-zinc-900/30 p-3.5 rounded-xl space-y-2 text-[10px] text-zinc-400">
-                        <div className="flex justify-between items-center">
-                          <span className="flex items-center gap-1">
-                            <Calendar className="w-3.5 h-3.5 text-zinc-500" />
-                            <span>Date:</span>
-                          </span>
-                          <span className="text-zinc-300 font-semibold">
-                            {new Date(order.createdAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
-                          </span>
-                        </div>
-
-                        <div className="flex justify-between items-center">
-                          <span className="flex items-center gap-1">
-                            <ShieldCheck className="w-3.5 h-3.5 text-zinc-500" />
-                            <span>Delivery Handle:</span>
-                          </span>
-                          <span className="text-white font-bold">{order.billingDetails?.discordOrTelegram}</span>
-                        </div>
-
-                        <div className="flex justify-between items-center">
-                          <span className="flex items-center gap-1">
-                            <Info className="w-3.5 h-3.5 text-zinc-500" />
-                            <span>Payment Method:</span>
-                          </span>
-                          <span className="text-zinc-300 truncate max-w-[200px]" title={order.billingDetails?.paymentMethod}>
-                            {order.billingDetails?.paymentMethod}
-                          </span>
-                        </div>
-
-                        <div className="border-t border-zinc-900 pt-2.5 mt-2.5 flex justify-between items-center text-xs">
-                          <span className="font-bold text-white uppercase tracking-wider">Total Paid</span>
-                          <span className="text-accent-green font-black text-sm">₹{order.totalAmount}</span>
-                        </div>
-                      </div>
-
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="text-center py-12 text-zinc-500 text-xs space-y-2 font-semibold">

@@ -201,7 +201,7 @@ export default function Home({ onNavigate, onFilterCategory, onViewDetails }) {
           <p className="text-zinc-500 text-xs">Instantly loaded catalog categories</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
           {categories.map((cat) => (
             <div
               key={cat.name}
@@ -240,13 +240,13 @@ export default function Home({ onNavigate, onFilterCategory, onViewDetails }) {
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
             <SkeletonLoader />
             <SkeletonLoader />
             <SkeletonLoader />
           </div>
         ) : listings && listings.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
             {listings.map((item) => (
               <Card
                 key={item._id}
