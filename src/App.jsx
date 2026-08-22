@@ -131,7 +131,7 @@ export default function App() {
       case 'about':
         return <AboutUs />;
       case 'contact':
-        return <ContactUs />;
+        return <ContactUs onNavigate={handleNavigate} />;
       case 'terms':
         return <TermsConditions />;
       case 'checkout':

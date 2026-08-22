@@ -86,41 +86,111 @@ export default function Home({ onNavigate, onFilterCategory, onViewDetails }) {
   return (
     <div className="space-y-16 pb-16 select-none relative overflow-hidden">
       
-      {/* Hero Section with Ambient Lights */}
-      <section id="hero-section" className="relative overflow-hidden py-14 md:py-20 px-4 sm:px-6 lg:px-8 border-b border-zinc-900 rounded-3xl bg-zinc-950/20 shadow-inner">
+      {/* Hero Section with Ambient Lights & Dynamic Visual Showcase Promos */}
+      <section id="hero-section" className="relative overflow-hidden py-12 md:py-16 px-6 sm:px-8 border border-zinc-900 rounded-3xl bg-zinc-950/20 shadow-inner">
         {/* Glow ambient backdrops */}
         <div className="absolute top-0 left-10 w-80 h-80 bg-accent-green/10 rounded-full blur-[120px] pointer-events-none animate-pulse" />
         <div className="absolute bottom-0 right-10 w-80 h-80 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none animate-pulse duration-5000" />
         
-        <div className="max-w-4xl mx-auto text-center space-y-6 relative z-10">
-          <div className="inline-flex items-center gap-2 bg-zinc-900 border border-zinc-800 text-zinc-300 text-[10px] uppercase font-black tracking-widest px-4 py-2 rounded-full shadow-lg">
-            <ShieldCheck className="w-4 h-4 text-accent-green" />
-            <span>Secure Safe Pay Hold Protection</span>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-7xl mx-auto relative z-10">
           
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight tracking-tight">
-            Buy <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-400">Social Accounts</span> & <span className="bg-clip-text text-transparent bg-gradient-to-r from-accent-green via-emerald-400 to-cyan-400">YT Premium</span> Cheap
-          </h1>
-          
-          <p className="text-zinc-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-semibold">
-            Get active Instagram profiles, YouTube Premium keys, streaming subscriptions, and expert services at low prices. Safe 24-hour handover.
-          </p>
+          {/* Left Column: Heading & Text */}
+          <div className="lg:col-span-7 space-y-6 text-left">
+            <div className="inline-flex items-center gap-2 bg-zinc-900 border border-zinc-800 text-zinc-300 text-[10px] uppercase font-black tracking-widest px-4 py-2 rounded-full shadow-lg">
+              <ShieldCheck className="w-4 h-4 text-accent-green" />
+              <span>Secure Safe Pay Hold Protection</span>
+            </div>
+            
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">
+              Buy <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-400">Social Accounts</span> & <span className="bg-clip-text text-transparent bg-gradient-to-r from-accent-green via-emerald-400 to-cyan-400">YT Premium</span> Cheap
+            </h1>
+            
+            <p className="text-zinc-400 text-xs sm:text-sm max-w-xl leading-relaxed font-semibold">
+              Get active Instagram profiles, YouTube Premium keys, streaming subscriptions, and expert services at low prices. Safe 24-hour handover.
+            </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-            <button
-              onClick={() => onNavigate('shop')}
-              className="bg-accent-green hover:bg-accent-green-hover text-black font-extrabold text-xs py-4 px-8 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-accent-green/20 hover:scale-[1.02]"
-            >
-              <span>Open Shop</span>
-              <ArrowRight className="w-4 h-4 stroke-[3px]" />
-            </button>
-            <button
-              onClick={() => onNavigate('about')}
-              className="bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs py-4 px-8 rounded-xl border border-zinc-800 transition-colors cursor-pointer"
-            >
-              How It Works
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+              <button
+                onClick={() => onNavigate('shop')}
+                className="bg-accent-green hover:bg-accent-green-hover text-black font-extrabold text-xs py-4 px-8 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-accent-green/20 hover:scale-[1.02]"
+              >
+                <span>Open Shop</span>
+                <ArrowRight className="w-4 h-4 stroke-[3px]" />
+              </button>
+              <button
+                onClick={() => onNavigate('about')}
+                className="bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs py-4 px-8 rounded-xl border border-zinc-800 transition-colors cursor-pointer"
+              >
+                How It Works
+              </button>
+            </div>
           </div>
+
+          {/* Right Column: Dynamic Visual Showcase Promo Cards (Shows active discounts and key offerings) */}
+          <div className="lg:col-span-5 flex flex-col gap-4">
+            
+            {/* Promo Card 1: Youtube Premium */}
+            <div className="bg-[#0c0c0d] border border-zinc-850 hover:border-red-500/60 p-5 rounded-2xl relative overflow-hidden group shadow-xl transition-all duration-300">
+              <div className="h-1 w-full absolute top-0 left-0 bg-gradient-to-r from-red-600 to-red-400" />
+              <div className="flex justify-between items-start">
+                <div className="space-y-1">
+                  <span className="text-[8px] font-black text-red-400 uppercase tracking-widest bg-red-500/5 border border-red-500/10 px-2 py-0.5 rounded">
+                    YouTube Premium
+                  </span>
+                  <h4 className="text-xs font-black text-white pt-1">1 Year Private subscription</h4>
+                  <p className="text-zinc-500 text-[10px] font-semibold">No Ads • Background Play • Offline Downloads</p>
+                </div>
+                <div className="text-right">
+                  <span className="text-red-400 font-black text-sm block">₹1,299</span>
+                  <span className="text-[8px] font-black bg-red-600 text-white px-2 py-0.5 rounded-full uppercase tracking-wider block mt-1 animate-pulse">
+                    60% OFF
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Promo Card 2: Instagram Page */}
+            <div className="bg-[#0c0c0d] border border-zinc-850 hover:border-pink-500/60 p-5 rounded-2xl relative overflow-hidden group shadow-xl transition-all duration-300">
+              <div className="h-1 w-full absolute top-0 left-0 bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-500" />
+              <div className="flex justify-between items-start">
+                <div className="space-y-1">
+                  <span className="text-[8px] font-black text-pink-400 uppercase tracking-widest bg-pink-500/5 border border-pink-500/10 px-2 py-0.5 rounded">
+                    Instagram Account
+                  </span>
+                  <h4 className="text-xs font-black text-white pt-1">Monetized Cooking Niche Page</h4>
+                  <p className="text-zinc-500 text-[10px] font-semibold">45K Real Followers • High Engagement</p>
+                </div>
+                <div className="text-right">
+                  <span className="text-pink-400 font-black text-sm block">₹24,900</span>
+                  <span className="text-[8px] font-black bg-pink-600 text-white px-2 py-0.5 rounded-full uppercase tracking-wider block mt-1">
+                    VERIFIED
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Promo Card 3: Netflix */}
+            <div className="bg-[#0c0c0d] border border-zinc-855 hover:border-emerald-500/60 p-5 rounded-2xl relative overflow-hidden group shadow-xl transition-all duration-300">
+              <div className="h-1 w-full absolute top-0 left-0 bg-gradient-to-r from-emerald-500 via-accent-green to-teal-400" />
+              <div className="flex justify-between items-start">
+                <div className="space-y-1">
+                  <span className="text-[8px] font-black text-accent-green uppercase tracking-widest bg-accent-green/5 border border-accent-green/10 px-2 py-0.5 rounded">
+                    Netflix Premium
+                  </span>
+                  <h4 className="text-xs font-black text-white pt-1">1 Year Private UHD Screens</h4>
+                  <p className="text-zinc-500 text-[10px] font-semibold">4 Screens Ultra HD • Full Warranty</p>
+                </div>
+                <div className="text-right">
+                  <span className="text-accent-green font-black text-sm block">₹3,200</span>
+                  <span className="text-[8px] font-black bg-accent-green text-black px-2 py-0.5 rounded-full uppercase tracking-wider block mt-1 font-extrabold animate-pulse">
+                    Save 50%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
         </div>
       </section>
 
@@ -136,9 +206,9 @@ export default function Home({ onNavigate, onFilterCategory, onViewDetails }) {
             <div
               key={cat.name}
               onClick={() => handleCategoryClick(cat.tag)}
-              className={`bg-card-dark border border-zinc-700/80 p-6 rounded-2xl cursor-pointer group hover:bg-zinc-900/30 hover:scale-[1.01] transition-all duration-300 select-none flex items-start gap-4 shadow-lg shadow-black/35 ${cat.hoverBorder}`}
+              className={`bg-[#0c0c0d] border border-zinc-800 p-6 rounded-2xl cursor-pointer group hover:bg-zinc-900/30 hover:scale-[1.01] transition-all duration-300 select-none flex items-start gap-4 shadow-lg shadow-black/35 ${cat.hoverBorder}`}
             >
-              <div className={`p-3 rounded-xl bg-zinc-900 border border-zinc-700/60 transition-all ${cat.iconBg}`}>
+              <div className={`p-3 rounded-xl bg-zinc-900 border border-zinc-800 transition-all ${cat.iconBg}`}>
                 {cat.icon}
               </div>
               <div className="space-y-1">
